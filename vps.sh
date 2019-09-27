@@ -124,30 +124,30 @@ EOF
 
 #Forward shadowsocks traffic through an internal vps in CN
 #USLA BWH TCP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 216.24.183.179:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p tcp -d 216.24.183.179 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 216.24.183.179:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p tcp -d 216.24.183.179 --dport 18388 -j SNAT --to-source 172.17.0.13
 #USLA BWH UDP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 216.24.183.179:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p udp -d 216.24.183.179 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 216.24.183.179:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p udp -d 216.24.183.179 --dport 18388 -j SNAT --to-source 172.17.0.13
 
 #USSA VIRMACH TCP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 107.174.240.124:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p tcp -d 107.174.240.124 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 107.174.240.124:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p tcp -d 107.174.240.124 --dport 18388 -j SNAT --to-source 172.17.0.13
 #USSA VIRMACH UDP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 107.174.240.124:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p udp -d 107.174.240.124 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 107.174.240.124:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p udp -d 107.174.240.124 --dport 18388 -j SNAT --to-source 172.17.0.13
 
 #USLA HOSTDARE TCP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 185.238.250.78:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p tcp -d 185.238.250.78 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p tcp --dport 18388 -j DNAT --to-destination 185.238.250.78:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p tcp -d 185.238.250.78 --dport 18388 -j SNAT --to-source 172.17.0.13
 #USLA HOSTDARE UDP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 185.238.250.78:18388
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p udp -d 185.238.250.78 --dport 18388 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p udp --dport 18388 -j DNAT --to-destination 185.238.250.78:18388
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p udp -d 185.238.250.78 --dport 18388 -j SNAT --to-source 172.17.0.13
 
 #HK-TECENT TCP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p tcp --dport 18888 -j DNAT --to-destination 124.156.100.46:18888
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p tcp -d 124.156.100.46 --dport 18888 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p tcp --dport 18888 -j DNAT --to-destination 124.156.100.46:18888
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p tcp -d 124.156.100.46 --dport 18888 -j SNAT --to-source 172.17.0.13
 #HK-TECENT UDP forwarding
-firewall-cmd --permanent --direct --passthrough -t nat -A PREROUTING -p udp --dport 18888 -j DNAT --to-destination 107.174.240.124:18888
-firewall-cmd --permanent --direct --passthrough -t nat -A POSTROUTING -p udp -d 124.156.100.46 --dport 18888 -j SNAT --to-source 172.17.0.13
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A PREROUTING -p udp --dport 18888 -j DNAT --to-destination 107.174.240.124:18888
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -p udp -d 124.156.100.46 --dport 18888 -j SNAT --to-source 172.17.0.13
 
