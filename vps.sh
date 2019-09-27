@@ -82,6 +82,8 @@ fi
 cat >>/etc/sysctl.d/shadowsocks_optimized <<EOF
 #Shadowsocks optimized
 
+#Enable ipv4 forward
+net.ipv4.ip_forward = 1
 # max write buffer
 net.core.wmem_max = 67108864
 # default read buffer
