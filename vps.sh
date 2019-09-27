@@ -2,7 +2,7 @@
 
 yum -q -y install wget vim >/dev/null 2>&1 && \
 hostnamectl set-hostname vps &>/dev/null && \
-timedatectl set-timezone Asia/Hong_Kong
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 if $? -eq 0 then
 cat >> /etc/bashrc <<EOF
