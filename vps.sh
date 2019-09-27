@@ -117,3 +117,6 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 # turn on path MTU discovery
 net.ipv4.tcp_mtu_probing = 1
 EOF
+
+[ $? -eq ] && sysctl --system
+
