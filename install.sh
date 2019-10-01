@@ -17,7 +17,7 @@ git submodule update --init --recursive
 make && make install
 
 #Configurations
-#Get user input port number
+#Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
 #Check if port valid
 #POSIX ERE not supporting \d or \w. Using [[:digit:]] [0-9] and ^$ instead
