@@ -50,7 +50,6 @@ do
       ;;
     esac
 done
-      
 
 mkdir -p /etc/shadowsocks-libev
 cd /etc/shadowsocks-libev
@@ -78,3 +77,4 @@ systemctl enable --now shadowsocks-libev
 
 #Firewall settings
 firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
+#test
