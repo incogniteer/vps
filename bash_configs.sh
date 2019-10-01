@@ -4,7 +4,8 @@ yum -q -y install wget vim >/dev/null 2>&1 && \
 hostnamectl set-hostname vps &>/dev/null && \
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-if $? -eq 0 then
+#Add [ ] otherwise will report errors
+if [ $? -eq 0 ]; then
 cat >> /etc/bashrc <<EOF
 
 #User defined bash configs
@@ -49,5 +50,6 @@ export VISUAL="$(command -pv vim)"
 export EDITOR="$(command -pv vim)"
 
 EOF
-
 fi
+
+[ $? -eq 0 ] && . /etc/bashrc
