@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-cat >>/etc/sysctl.d/shadowsocks_optimized <<EOF
+tuning=/etc/sysctl.d/shadowsocks_tuning.conf
+cat >> "$tuning"  <<EOF
 #Optimize shadowsocks connections
 
 # max write buffer
@@ -39,11 +40,12 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 net.ipv4.tcp_mtu_probing = 1
 EOF
 
-[ $? -eq ] && sysctl --system
+[ $? -eq ] && sysctl -p $tuning 
 
 cat >> /etc/security/limits.conf <<eof
 
 #Optimized for shadowsocks
 * soft nofile 51200
 * hard nofile 51200
+
 eof
