@@ -7,7 +7,7 @@ yum -y install libsodium-devel mbedtls-devel
 
 cd /usr/local/src
 #Check if shadowsocks-libev direcotory exists
-ls shadowsocks-libev && rm -rf shadowsocks-libev
+ls shadowsocks-libev && rm -rf shadowsocks-libev/
 #Download the source code
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
