@@ -21,6 +21,7 @@ git submodule update --init --recursive
 ./configure --disable-documentation
 make && make install
 
+if [ $? -eq 0]; then
 #Configurations
 #Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
@@ -57,6 +58,8 @@ do
 done
 
 mkdir -p /etc/shadowsocks-libev
+
+fi
 cd /etc/shadowsocks-libev
 cat > config.json <<EOF
 {
