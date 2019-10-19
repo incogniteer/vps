@@ -21,6 +21,9 @@ git submodule update --init --recursive
 ./autogen.sh
 ./configure --disable-documentation
 make && make install
+else 
+    echo "Something wrong, exit..."
+    exit 1
 fi
 
 if [ $? -eq 0]; then
@@ -60,6 +63,9 @@ do
 done
 
 mkdir -p /etc/shadowsocks-libev
+else 
+    echo "Something wrong, exiting..."
+    exit 1
 
 fi
 
