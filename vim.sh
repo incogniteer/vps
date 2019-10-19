@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 #Global vim configs
 cat >>/etc/vimrc <<EOF
