@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #Forward shadowsocks traffic through an internal vps in CN
 #Enable ipv4 forward
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/enable_ip_forward && sysctl -p /etc/sysctl.d/*
