@@ -6,6 +6,8 @@ yum install -y pcre pcre-devel git gettext gcc autoconf libtool automake make as
 yum -y install libsodium-devel mbedtls-devel
 
 cd /usr/local/src
+#Check if shadowsocks-libev direcotory exists
+ls shadowsocks-libev && rm -rf shadowsocks-libev
 #Download the source code
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
