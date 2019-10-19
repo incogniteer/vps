@@ -11,6 +11,9 @@ ls shadowsocks-libev &>/dev/null && rm -rf shadowsocks-libev/
 #Download the source code
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
+#Clear /usr/local/lib
+rm -rf /usr/local/lib/
+
 #Compile
 cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
