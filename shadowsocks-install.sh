@@ -3,7 +3,7 @@
 # Install dependencies and basics
 yum -y install wget git epel-release screen
 yum install -y pcre pcre-devel git gettext gcc autoconf libtool automake make asciidoc xmlto c-ares-devel libev-devel
-yum -y install libsodium mbedtls
+yum -y install libsodium mbedtls-devel
 
 cd /usr/local/src
 #Download the source code
