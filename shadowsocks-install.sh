@@ -15,7 +15,7 @@ git clone https://github.com/shadowsocks/shadowsocks-libev.git
 rm -rf /usr/local/lib/
 
 #Compile
-if [ $? -eq 0]; then
+if [ $? -eq 0 ]; then
 cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
 ./autogen.sh
