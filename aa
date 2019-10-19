@@ -20,7 +20,8 @@ chacha20-ietf-poly1305
 xchacha20-ietf-poly1305
 )
 
-select cipher in $ciphers;
+PS3="Which cipher do you prefer?"
+select cipher in ${ciphers[@]};
 do
     case $cipher in
       aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
@@ -29,7 +30,7 @@ do
       break
       ;;
       *)
-      echo "Please select a valid cipher!
+      echo "Please select a valid cipher!"
       ;;
     esac
 done
