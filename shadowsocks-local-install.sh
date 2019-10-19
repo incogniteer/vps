@@ -61,6 +61,7 @@ cat > config.json <<eof
   "mode":"tcp_and_udp",
   "fast_open":true
 } 
+eof
 
 #Change ExecStart from /usr/bin/ to /usr/local/bin
 cd rpm/SOURCES/systemd/
