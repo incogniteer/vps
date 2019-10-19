@@ -20,7 +20,9 @@ cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
 ./autogen.sh
 ./configure --disable-documentation
-make && make install
+make && make install &&
+echo success!
+exit 0
 else 
     echo "Something wrong, exit..."
     exit 1
