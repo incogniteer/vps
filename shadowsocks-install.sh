@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Install dependencies and basics
-yum -y install wget git epel-release screen
-yum -y install pcre pcre-devel git gettext gcc autoconf libtool automake make asciidoc xmlto c-ares-devel libev-devel
-yum -y install libsodium-devel mbedtls-devel
+#yum -y install wget git epel-release screen
+#yum -y install pcre pcre-devel git gettext gcc autoconf libtool automake make asciidoc xmlto c-ares-devel libev-devel
+#yum -y install libsodium-devel mbedtls-devel
 
 cd /usr/local/src
 #Check if shadowsocks-libev direcotory exists
