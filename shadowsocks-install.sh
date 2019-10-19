@@ -62,6 +62,8 @@ done
 mkdir -p /etc/shadowsocks-libev
 
 fi
+
+[ $? -eq 0 ] &&
 cd /etc/shadowsocks-libev
 cat > config.json <<EOF
 {
@@ -77,6 +79,7 @@ cat > config.json <<EOF
 } 
 EOF
 
+[ $? -eq ] &&
 #Change ExecStart from /usr/bin/ to /usr/local/bin
 cd rpm/SOURCES/systemd/
 sed -i.bak -e '/ExecStart/{s_/usr/bin_usr/local/bin_;}' -e '/ExecStart/aExecPreStart=/bin/sh -c "ulimit -n 51200"' /shadowsocks-libev.service
