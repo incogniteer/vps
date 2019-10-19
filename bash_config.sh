@@ -20,6 +20,7 @@ alias li='ls -i'
 alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
+alias rmdir='rmdir -v'
 alias cls="echo -en '\\x1bc'"
 alias vi=vim
 alias sudo='sudo ' #Enable alias in sudo
