@@ -1,4 +1,4 @@
-#!/usr/bin/env -i bash
+#!/bin/bash
 
 # Install dependencies and basics
 yum -y install wget git epel-release screen
