@@ -1,4 +1,4 @@
-if [ $? -eq 0]; then
+if [ $? -eq 0 ]; then
 #Configurations
 #Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
@@ -20,6 +20,7 @@ chacha20-ietf-poly1305
 xchacha20-ietf-poly1305
 )
 
+COLUMNS=0
 PS3="Which cipher do you prefer?"
 select cipher in ${ciphers[@]};
 do
