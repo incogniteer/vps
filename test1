@@ -10,3 +10,36 @@ while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $ser
   echo -n "Please enter port number between 1024 and 65535: "
   read server_port
 done
+
+echo "You've selected port: $server_port."
+
+#Get ciper method
+ciphers=(
+aes-256-gcm 
+aes-256-cfb
+chacha20-ietf-poly1305
+xchacha20-ietf-poly1305
+)
+
+COLUMNS=0
+PS3="Which cipher do you prefer?"
+select cipher in ${ciphers[@]};
+do
+    case $cipher in
+      aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
+      echo "You selected $cipher!"
+      cipher=$cipher
+      break
+      ;;
+      *)
+      echo "Please select a valid cipher!"
+      ;;
+    esac
+done
+
+mkdir -p /etc/shadowsocks-libev
+else 
+    echo "Something wrong, exiting..."
+    exit 1
+
+fi
