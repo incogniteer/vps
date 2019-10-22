@@ -11,7 +11,7 @@ while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $ser
   read server_port
 done
 
-echo "You've selected port: $server_port."
+echo -e "You've selected port: $server_port.\n"
 
 #Get ciper method
 ciphers=(
@@ -36,10 +36,7 @@ do
       ;;
     esac
 done
+[ $? -eq 0 ] && echo -e "You've selected cipher: $cipher.\n"
 
 mkdir -p /etc/shadowsocks-libev
-else 
-    echo "Something wrong, exiting..."
-    exit 1
 
-fi
