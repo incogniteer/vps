@@ -36,6 +36,7 @@ do
       ;;
     esac
 done
+
 [ $? -eq 0 ] && echo -e "You've selected cipher: $cipher.\n"
 
 mkdir -p /etc/shadowsocks-libev
