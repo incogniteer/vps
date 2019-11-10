@@ -26,4 +26,7 @@ set smartindent
 set number
 set hlsearch
 
+" Exit visual model in vim immediately
+set timeoutlen=1000 ttimeoutlen=0
+
 EOF
