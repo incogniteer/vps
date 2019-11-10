@@ -23,6 +23,7 @@ alias cp='cp -v'
 alias rmdir='rmdir -v'
 alias cls="echo -en '\\x1bc'"
 alias vi=vim
+alias py='python3'
 alias sudo='sudo ' #Enable alias in sudo
 
 alias rmdir='rmdir -pv'
