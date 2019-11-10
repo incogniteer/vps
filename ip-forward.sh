@@ -25,4 +25,4 @@ firewall-cmd -q --permanent --add-forward-port=port=18388:proto={tcp,udp}:toport
 firewall-cmd -q --permanent --add-forward-port=port=18888:proto={tcp,udp}:toport=18888:toaddr=124.156.100.46 && firewall-cmd -q --reload
 
 #Enable masquerading
-firewall-cmd -q --permanent --add-masquerade 
+firewall-cmd -q --permanent --add-masquerade && firewall-cmd -q --reload
