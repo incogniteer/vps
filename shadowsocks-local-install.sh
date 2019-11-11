@@ -39,6 +39,7 @@ else
     exit 1
 fi
 
+[ $? -eq 0 ] &&
 #Configurations
 #Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
