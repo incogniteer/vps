@@ -7,7 +7,7 @@ dependencies=(
               automake make asciidoc xmlto c-ares-devel libev-devel
               )
 
-for package in "${dependencies[@]}; do 
+for package in "${dependencies[@]}"; do 
     if rpm -qa | grep "$package" then
         :
         else
