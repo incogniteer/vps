@@ -41,7 +41,7 @@ do
       break
       ;;
       *)
-      echo "Please select a valid cipher!
+      echo "Please select a valid cipher!"
       ;;
     esac
 done
