@@ -15,6 +15,7 @@ for package in "${dependencies[@]}; do
     fi
 done
 
+[ $? -eq 0 ] &&
 #Compile
 cd /usr/local/src
 #Check if shadowsocks-libev direcotory exists
