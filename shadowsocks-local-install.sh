@@ -8,7 +8,7 @@ dependencies=(
               )
 
 for package in "${dependencies[@]}"; do 
-    if rpm -qa | grep "$package"; then
+    if rpm -qa | grep "^$package"; then
         :
         else
         yum -y install "$package"
