@@ -4,7 +4,7 @@ dependencies=(
               wget git epel-release screen pcre pcre-devel git gettext gcc 
               autoconf libtool automake make asciidoc xmlto c-ares-devel 
               libev-devel pcre pcre-devel git gettext gcc autoconf libtool 
-              automake make asciidoc xmlto c-ares-devel libev-devel
+              automake make asciidoc xmlto c-ares-devel libev-devel mbedtls
               )
 
 for package in "${dependencies[@]}"; do 
