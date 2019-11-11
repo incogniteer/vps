@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-yum -q -y install wget screen vim >/dev/null 2>&1 && \
+yum -y install wget screen vim >/dev/null 2>&1 && \
 hostnamectl set-hostname vps &>/dev/null && \
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
