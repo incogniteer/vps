@@ -48,6 +48,8 @@ done
 
 mkdir -p /etc/shadowsocks-libev
 cd /etc/shadowsocks-libev
+
+#超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
 cat > config.json <<eof
 {
   "server":"$server_address",
@@ -55,7 +57,6 @@ cat > config.json <<eof
   "local_address":"127.0.0.1",
   "local_port":1080,
   "password":"884595ds12",
-  #超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
   "timeout":60,
   "method":"$cipher",
   "mode":"tcp_and_udp",
@@ -72,4 +73,4 @@ cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
 systemctl enable --now shadowsocks-libev
 
 #Firewall settings
-firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
+[ systemctl is-active firewalld ] || systemctl enable --now firewalld && firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
