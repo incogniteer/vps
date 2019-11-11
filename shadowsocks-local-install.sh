@@ -8,8 +8,9 @@ dependencies=(
               )
 
 for package in "${dependencies[@]}"; do 
+#git attention!
     if rpm -qa | grep "^$package"; then
-        :
+        "$package" already installed!
         else
         yum -y install "$package"
     fi
