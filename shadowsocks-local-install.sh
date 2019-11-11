@@ -1,11 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+dependencies=(
+              wget git epel-release screen pcre pcre-devel git gettext gcc 
+              autoconf libtool automake make asciidoc xmlto c-ares-devel 
+              libev-devel pcre pcre-devel git gettext gcc autoconf libtool 
+              automake make asciidoc xmlto c-ares-devel libev-devel
+              )
+
+for package in "${dependencies[@]}; do 
+    if rpm -qa | grep "$package" then
+        :
+        else
+        yum -y install "$package"
+    fi
+done
 
 #Compile
+cd /usr/local/src
+#Check if shadowsocks-libev direcotory exists
+ls shadowsocks-libev &>/dev/null && rm -rf shadowsocks-libev/
+#Download the source code
+git clone https://github.com/shadowsocks/shadowsocks-libev.git
+
+#Clear /usr/local/lib
+#rm -rf /usr/local/lib/
+
+#Compile
+if [ $? -eq 0 ]; then
 cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
 ./autogen.sh
 ./configure --disable-documentation
-make && make install
+make && make install &&
+echo "installation succeeded!"
+exit 0
+else 
+    echo "Something wrong, exit..."
+    exit 1
+fi
 
 #Configurations
 #Get port number
