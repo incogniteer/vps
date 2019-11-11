@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-yum -y install wget screen vim && \
-hostnamectl set-hostname vps && \
+yum -y install wget screen vim 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 #Add [ ] otherwise will report errors
