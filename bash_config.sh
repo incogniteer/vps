@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-yum -q -y install wget screen vim >/dev/null 2>&1 && \
-hostnamectl set-hostname vps &>/dev/null && \
+yum -y install wget screen vim 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 #Add [ ] otherwise will report errors
@@ -23,6 +22,7 @@ alias cp='cp -v'
 alias rmdir='rmdir -v'
 alias cls="echo -en '\\x1bc'"
 alias vi=vim
+alias py='python3'
 alias sudo='sudo ' #Enable alias in sudo
 
 alias rmdir='rmdir -pv'

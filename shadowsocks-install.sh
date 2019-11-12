@@ -1,21 +1,40 @@
 #!/bin/bash
 
 # Install dependencies and basics
+<<<<<<< HEAD
 yum -y install wget git epel-release screen
 yum install -y pcre pcre-devel git gettext gcc autoconf libtool automake make asciidoc xmlto c-ares-devel libev-devel
 yum -y install libsodium mbedtls-devel
+=======
+#yum -y install wget git epel-release screen
+#yum -y install pcre pcre-devel git gettext gcc autoconf libtool automake make asciidoc xmlto c-ares-devel libev-devel
+#yum -y install libsodium-devel mbedtls-devel
+>>>>>>> 6b0b7cfc18c67aff098d0f1276f9f32b7983c04a
 
 cd /usr/local/src
+#Check if shadowsocks-libev direcotory exists
+ls shadowsocks-libev &>/dev/null && rm -rf shadowsocks-libev/
 #Download the source code
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
+#Clear /usr/local/lib
+rm -rf /usr/local/lib/
+
 #Compile
+if [ $? -eq 0 ]; then
 cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
 ./autogen.sh
 ./configure --disable-documentation
-make && make install
+make && make install &&
+echo success!
+exit 0
+else 
+    echo "Something wrong, exit..."
+    exit 1
+fi
 
+if [ $? -eq 0 ]; then
 #Configurations
 #Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
@@ -24,32 +43,11 @@ read -p "Please set up a server port(Default: 18388): " server_port
 #" ; " is required before then
 #Using -gt -lt for arithmetic. > < for strings!
 #Using while or for loop, instead of if, then construct
-#while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
-#  echo -n "Please enter port number between 1024 and 65535: "
-#  read server_port
-#done
-
-#Get ciper method
-ciphers=(
-aes-256-gcm 
-aes-256-cfb
-chacha20-ietf-poly1305
-xchacha20-ietf-poly1305
-)
-
-select cipher in $ciphers;
-do
-    case $cipher in
-      aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
-      echo "You selected $cipher!"
-      cipher=$cipher
-      break
-      ;;
-      *)
-      echo "Please select a valid cipher!
-      ;;
-    esac
+while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
+  echo -n "Please enter port number between 1024 and 65535: "
+  read server_port
 done
+<<<<<<< HEAD
 
 mkdir -p /etc/shadowsocks-libev
 cd /etc/shadowsocks-libev
@@ -80,3 +78,5 @@ systemctl enable --now shadowsocks-libev
 
 #Firewall settings
 firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
+=======
+>>>>>>> 6b0b7cfc18c67aff098d0f1276f9f32b7983c04a

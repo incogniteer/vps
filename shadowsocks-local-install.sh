@@ -1,28 +1,64 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+dependencies=(
+              wget git epel-release screen pcre pcre-devel git gettext gcc 
+              autoconf libtool automake make asciidoc xmlto c-ares-devel 
+              libev-devel pcre pcre-devel git gettext gcc autoconf libtool 
+              automake make asciidoc xmlto c-ares-devel libev-devel mbedtls
+              )
+
+for package in "${dependencies[@]}"; do 
+#git attention!
+    if rpm -qa | grep "^$package"; then
+        "$package" already installed!
+        else
+        yum -y install "$package"
+    fi
+done
+
+[ $? -eq 0 ] &&
+#Compile
+cd /usr/local/src
+#Check if shadowsocks-libev direcotory exists
+ls shadowsocks-libev &>/dev/null && rm -rf shadowsocks-libev/
+#Download the source code
+git clone https://github.com/shadowsocks/shadowsocks-libev.git
+
+#Clear /usr/local/lib
+#rm -rf /usr/local/lib/
 
 #Compile
+if [ $? -eq 0 ]; then
 cd /usr/local/src/shadowsocks-libev
 git submodule update --init --recursive
 ./autogen.sh
 ./configure --disable-documentation
-make && make install
+make && make install &&
+echo "installation succeeded!"
+exit 0
+else 
+    echo "Something wrong, exit..."
+    exit 1
+fi
 
+[ $? -eq 0 ] &&
 #Configurations
 #Get port number
 read -p "Please set up a server port(Default: 18388): " server_port
-echo "You have selected server port: $server_port."
-read -p "Please set up server address: " server_address
-echo "You have selected server address: $server_address."
 
 #Check if port valid
 #POSIX ERE not supporting \d or \w. Using [[:digit:]] [0-9] and ^$ instead
 #" ; " is required before then
 #Using -gt -lt for arithmetic. > < for strings!
 #Using while or for loop, instead of if, then construct
-#while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
-#  echo -n "Please enter port number between 1024 and 65535: "
-#  read server_port
+while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
+  echo -n "Please enter port number between 1024 and 65535: "
+  read server_port
 #done
+
+echo "You have selected server port: $server_port."
+read -p "Please set up server address: " server_address
+echo "You have selected server address: $server_address."
 
 #Get ciper method
 ciphers=(
@@ -32,22 +68,23 @@ chacha20-ietf-poly1305
 xchacha20-ietf-poly1305
 )
 
-select cipher in $ciphers;
+select cipher in "${ciphers[@]};
 do
-    case $cipher in
-      aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
+    case $cipher in aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
       echo "You selected $cipher!"
       cipher=$cipher
       break
       ;;
       *)
-      echo "Please select a valid cipher!
+      echo "Please select a valid cipher!"
       ;;
     esac
 done
 
 mkdir -p /etc/shadowsocks-libev
 cd /etc/shadowsocks-libev
+
+#超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
 cat > config.json <<eof
 {
   "server":"$server_address",
@@ -55,7 +92,6 @@ cat > config.json <<eof
   "local_address":"127.0.0.1",
   "local_port":1080,
   "password":"884595ds12",
-  #超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
   "timeout":60,
   "method":"$cipher",
   "mode":"tcp_and_udp",
@@ -73,4 +109,4 @@ cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
 systemctl enable --now shadowsocks-libev
 
 #Firewall settings
-firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
+[ systemctl is-active firewalld ] || systemctl enable --now firewalld && firewall-cmd --permanent --add-port="${server_port:-18388}"/{tcp,udp} && firewall-cmd --reload
