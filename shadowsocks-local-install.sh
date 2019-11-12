@@ -5,14 +5,16 @@ dependencies=(
               autoconf libtool automake make asciidoc xmlto c-ares-devel 
               libev-devel pcre pcre-devel git gettext gcc autoconf libtool 
               automake make asciidoc xmlto c-ares-devel libev-devel mbedtls
-              )
+              mbedtls-devel libsodium libsodium-devel
+             )
 
 for package in "${dependencies[@]}"; do 
 #git attention!
-    if rpm -qa | grep "^$package"; then
-        "$package" already installed!
+    if rpm -q "$package"; then
+        printf "%s%*s" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
         else
-        yum -y install "$package"
+        #yum -y install "$package"
+        echo "Starting to install $package"
     fi
 done
 
