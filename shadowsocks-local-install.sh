@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 
+RED='\033[0;31m'
+NC='\033[0m'
+
 dependencies=(
-              wget git epel-release screen pcre pcre-devel git gettext gcc 
-              autoconf libtool automake make asciidoc xmlto c-ares-devel 
-              libev-devel pcre pcre-devel git gettext gcc autoconf libtool 
-              automake make asciidoc xmlto c-ares-devel libev-devel mbedtls
-              mbedtls-devel libsodium libsodium-devel
+            asciidoc autoconf automake c-ares-devel epel-release
+            gcc gettext git libev-devel libsodium libsodium-devel
+            libtool make mbedtls mbedtls-devel pcre pcre-devel 
+            screen wget xmlto
              )
 
 for package in "${dependencies[@]}"; do 
-#git attention!
-    if rpm -q "$package"; then
-        printf "%s%*s" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
+    if rpm -q "$package" >/dev/null; then
+        #Put color code in format strings!
+        printf "%s${RED}%*s${NC}" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
         else
         #yum -y install "$package"
-        echo "Starting to install $package"
+        printf "%s\n" "Not installed yet"
+        printf "%s\n" "Starting to install $package..."
     fi
 done
 
