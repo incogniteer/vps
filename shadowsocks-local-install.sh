@@ -15,9 +15,8 @@ for package in "${dependencies[@]}"; do
         #Put color code in format strings!
         printf "%s${RED}%*s${NC}" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
         else
-        #yum -y install "$package"
-        printf "%s\n" "Not installed yet"
         printf "%s\n" "Starting to install $package..."
+        yum -y install "$package"
     fi
 done
 
