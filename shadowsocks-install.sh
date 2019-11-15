@@ -55,10 +55,11 @@ read -p "Please set up a server port(Default: 18388): " server_port
 #" ; " is required before then
 #Using -gt -lt for arithmetic. > < for strings!
 #Using while or for loop, instead of if, then construct
-while [[ ! ( $server_port =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
+#Use assign default value
+while [[ ! ( ${server_port:=18388} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
   read server_port
-#done
+done
 
 echo "You have selected server port: $server_port."
 read -p "Please set up server address: " server_address
@@ -72,15 +73,18 @@ chacha20-ietf-poly1305
 xchacha20-ietf-poly1305
 )
 
-select cipher in "${ciphers[@]};
+PS3="Please pick up a preferred cipher..."
+select cipher in "${ciphers[@]}";
 do
+    #Use extended globbing
     case $cipher in aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
-      echo "You selected $cipher!"
+        #Escape !
+      echo "You selected $cipher"!
       cipher=$cipher
       break
       ;;
       *)
-      echo "Please select a valid cipher!"
+      echo "Please select a valid cipher"!
       ;;
     esac
 done
