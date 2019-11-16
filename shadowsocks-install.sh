@@ -7,7 +7,7 @@ set -o pipefail
 set -o errexit #set -e
 #set -o xtrace #set -x
 #DEBUG=false
-[[ "${DEBUG" == true ]] && set -o xtrace
+[[ "${DEBUG:-false}" == true ]] && set -o xtrace
 
 #bash cleanup for more robust and reliable script and less debugging!
 #cleanup code for ERR
@@ -32,7 +32,6 @@ NC='\033[0m'
 #immutable/unchangeable variable
 readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
 readonly CONFIG_DIR=/etc/shadowsocks-libev
-
 
 main() {
     install_dependency 
@@ -96,7 +95,7 @@ while [[ ! ( ${server_port:=18388} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 102
   read server_port
 done
 
-printf "%s${RED}%s${NC}\n"You have selected server port: " "$server_port."
+printf "%s${RED}%s${NC}\n" "You have selected server port: " "$server_port."
 }
 
 set_ip() {
@@ -197,13 +196,16 @@ trim_whitespace() {
     printf "%s" "$var"
 }
 
-whilelist_port() {
-    local PORT="$(trim_whitespace "${1}")"
-    if enable_firewall(); then
+whitelist_port() {
+    local PORT="$(trim_whitespace ${1})"
+    if enable_firewall; then
         firewall-cmd --permanent --zone=public \
         --add-port="${PORT}"/{tcp,udp} &&
         firewall-cmd --reload
     else
-        printf "%s\n" "Firewall is not enabled yet, exiting..." >&2
+        printf "%s\n" "Firewall is not enabled yet, exiting..."
+        exit 1
     fi
 }
+
+main
