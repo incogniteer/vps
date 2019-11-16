@@ -6,20 +6,14 @@ set -o nounset #set -u
 set -o pipefail
 set -o errexit #set -e
 #set -o xtrace #set -x
-[[ "$DEBUG" == true ]] && set -o xtrace
-
-RED='\033[0;31m'
-NC='\033[0m'
-DEBUG=false
-#immutable/unchangeable variable
-readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
-readonly CONFIG_DIR=/etc/shadowsocks-libev
+#DEBUG=false
+[[ "${DEBUG" == true ]] && set -o xtrace
 
 #bash cleanup for more robust and reliable script and less debugging!
 #cleanup code for ERR
 ERR_TRAP() {
     local RETVAL=$?
-    printf "%s\n" "Something is wrong, exiting now..."
+    printf "%s\n" "Something is wrong, exiting now..." >&2
     exit $RETVAL
 }
 
@@ -28,11 +22,17 @@ trap ERR_TRAP ERR
 #cleanup code for EXIT
 EXIT_TRAP() {
     local RETVAL=$?
-    printf "%s\n" "Something is wrong, exiting now..."
+    printf "%s\n" "Something is wrong, exiting now..." >&2
     exit $RETVAL
 }
 
 trap EXIT_TRAP ERR 
+RED='\033[0;31m'
+NC='\033[0m'
+#immutable/unchangeable variable
+readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
+readonly CONFIG_DIR=/etc/shadowsocks-libev
+
 
 main() {
     install_dependency 
@@ -81,7 +81,7 @@ if [ $? -eq 0 ]; then
     echo "installation succeeded!"
     exit 0
 else 
-    echo "Something wrong, exit..."
+    echo "Something wrong, exit..." >&2
     exit 1
 fi
 }
@@ -128,7 +128,7 @@ do
       break
       ;;
       *)
-      echo "Please select a valid cipher"!
+      echo "Please select a valid cipher"! >&2
       ;;
     esac
 done
@@ -201,9 +201,9 @@ whilelist_port() {
     local PORT="$(trim_whitespace "${1}")"
     if enable_firewall(); then
         firewall-cmd --permanent --zone=public \
-        --add-port=${PORT}/{tcp,udp} &&
+        --add-port="${PORT}"/{tcp,udp} &&
         firewall-cmd --reload
     else
-        printf "%s\n" "Firewall is not enabled yet, exiting..."
+        printf "%s\n" "Firewall is not enabled yet, exiting..." >&2
     fi
 }
