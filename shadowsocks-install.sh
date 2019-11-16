@@ -108,7 +108,7 @@ cat > config.json <<eof
 eof
 
 #Change ExecStart from /usr/bin/ to /usr/local/bin
-cd rpm/SOURCES/systemd/
+cd /usr/local/src/shadowsocks-libev/rpm/SOURCES/systemd/
 sed -i.bak -e '/ExecStart/{s_/usr/bin_usr/local/bin_;}' -e '/ExecStart/aExecPreStart=/bin/sh -c "ulimit -n 51200"' /shadowsocks-libev.service
 cp shadowsocks-libev.service /usr/lib/systemd/system/
 cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
