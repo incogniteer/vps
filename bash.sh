@@ -44,6 +44,7 @@ alias .3='cd ../../../'
 alias .4='cd ../../../../'
 alias .5='cd ../../../../../'
 alias r='fc -s'
+alias ret='echo $?'
 
 #Alternatively, [ -t 0 ] or if tty -s >/dev/null 2>&1; then
 [[ $- == *i* ]] && stty -ixon
