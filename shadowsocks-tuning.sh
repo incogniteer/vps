@@ -11,6 +11,7 @@ readonly INSTALL_DIR="/usr/lib/systemd/system"
 tuning=/etc/sysctl.d/shadowsocks_tuning.conf
 
 sysctl_tune() {
+
 cat >> "$tuning"  <<EOF
 #Optimize shadowsocks connections
 
@@ -49,6 +50,7 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 # turn on path MTU discovery
 net.ipv4.tcp_mtu_probing = 1
 EOF
+
 }
 
 increase_nofile() {
@@ -57,7 +59,7 @@ increase_nofile() {
     * soft nofile 65535
     * hard nofile 65535
 
-    EOF
+EOF
 
     cd "${INSTALL_DIR}"
     #LimitNOFILE must be same as ulimit -n

@@ -130,6 +130,7 @@ cd ${CONFIG_DIR}
 
 #超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
 #comment not allowed in here doc. Use 0.0.0.0
+#Delete local_port, local_address to avoid errors
 cat > config.json <<eof
 {
   "server":"0.0.0.0",
@@ -169,11 +170,15 @@ if systemctl -q is-enabled ${SERVICE}; then
     systemctl disable ${SERVICE}
 fi
 
+if [[ ${INSTALL_DIR} ]]; then
 rm -rf ${INSTALL_DIR}
 rm -f  /usr/lib/systemd/system/shadowsocks-libev.service
 rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default 
 systemctl daemon-reload
 systemctl reset-failed #disable failed warning message after removed
+
+disable_port ${server_port}
+fi
 
 }
 
@@ -213,6 +218,18 @@ enable_port() {
         firewall-cmd --reload
     else
         printf "%s\n" "Firewall is not enabled yet, exiting..."
+        exit 1
+    fi
+}
+
+disable_port() {
+    local PORT="$(trim_whitespace ${1})"
+    if enable_firewall; then
+        firewall-cmd --permanent --zone=public \
+        --remove-port="${PORT}"/{tcp,udp} &&
+        firewall-cmd --reload
+    else
+        printf "%s\n" "Port are not disabled properly...please try again later."
         exit 1
     fi
 }
