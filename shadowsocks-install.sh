@@ -39,18 +39,6 @@ NC='\033[0m'
 readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
 readonly CONFIG_DIR=/etc/shadowsocks-libev
 
-main() {
-    install_dependency 
-    compile_shadowsocks
-    set_port
-    set_ip
-    set_cipher
-    config_shadowsocks
-    install_shadowsocks
-    enable_port $server_port  #not forget to ref $1
-    info
-}
-
 install_dependency() {
 dependencies=(
             asciidoc autoconf automake c-ares-devel epel-release
@@ -72,8 +60,6 @@ done
 
 #Compile
 compile_shadowsocks() {
-#Remove ss service
-remove_shadowsocks
 cd /usr/local/src
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
@@ -239,6 +225,19 @@ info() {
     printf "%s${RED}%s${NC};\n" "Server port: " "$server_port"
     printf "%s${RED}%s${NC};\n" "Cipher: " "$cipher"
     printf "%s\n" "Finished, bye"
+}
+
+main() {
+    install_dependency 
+    remove_shadowsocks
+    compile_shadowsocks
+    set_port
+    set_ip
+    set_cipher
+    config_shadowsocks
+    install_shadowsocks
+    enable_port $server_port  #not forget to ref $1
+    info
 }
 
 main
