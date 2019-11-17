@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
+#Strick mode
+set -o errexit
+set -o nounset
+set -o pipefail
+
+#Environment
+readonly INSTALL_DIR="/usr/lib/systemd/system"
+
 tuning=/etc/sysctl.d/shadowsocks_tuning.conf
+
+sysctl_tune() {
 cat >> "$tuning"  <<EOF
 #Optimize shadowsocks connections
 
@@ -39,13 +49,33 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 # turn on path MTU discovery
 net.ipv4.tcp_mtu_probing = 1
 EOF
+}
 
-[ $? -eq ] && sysctl -p $tuning 
+increase_nofile() {
+    cat >> /etc/security/limits.conf <<EOF
 
-cat >> /etc/security/limits.conf <<eof
+    * soft nofile 65535
+    * hard nofile 65535
 
-#Optimized for shadowsocks
-* soft nofile 51200
-* hard nofile 51200
+    EOF
 
-eof
+    cd "${INSTALL_DIR}"
+    #LimitNOFILE must be same as ulimit -n
+    sed -i -e '/ExecStart/iExecStartPre=/bin/sh -c "ulimit -n 65535"' \
+           -e '/LimitNOFILE/{s:*:LimitNOFILE=65535' shadowsocks-libev.service
+}
+
+reload_shadowsocks() {
+    #reload systemd unit file and recreate dependency tree
+    systemctl daemon-reload &&
+    systemctl reset-failed &&
+    systemctl restart shadowsocks-libev
+}
+
+main() {
+    sysctl_tune
+    increase_nofile
+    reload_shadowsocks
+}
+
+main

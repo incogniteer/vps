@@ -6,27 +6,33 @@ set -o nounset #set -u
 set -o pipefail
 set -o errexit #set -e
 #set -o xtrace #set -x
-#DEBUG=false
+DEBUG=true
 [[ "${DEBUG:-false}" == true ]] && set -o xtrace
 
 #bash cleanup for more robust and reliable script and less debugging!
 #cleanup code for ERR
-ERR_TRAP() {
+_err_trap() {
     local RETVAL=$?
     printf "%s\n" "Something is wrong, exiting now..." >&2
     exit $RETVAL
 }
 
-trap ERR_TRAP ERR 
+trap _err_trap ERR 
 
 #cleanup code for EXIT
-EXIT_TRAP() {
+_exit_trap() {
     local RETVAL=$?
-    printf "%s\n" "Something is wrong, exiting now..." >&2
+    if [[ $RETVAL != 0 ]]; then
+    printf "%s\n" "Script is exiting by trapping...probably something wrong.."
     exit $RETVAL
+else
+    printf "%s\x21\n" "Script run without problems"
+fi
+    
 }
 
-trap EXIT_TRAP ERR 
+trap _exit_trap EXIT 
+
 RED='\033[0;31m'
 NC='\033[0m'
 #immutable/unchangeable variable
@@ -41,7 +47,8 @@ main() {
     set_cipher
     config_shadowsocks
     install_shadowsocks
-    whitelist_port
+    enable_port $server_port  #not forget to ref $1
+    info
 }
 
 install_dependency() {
@@ -65,10 +72,9 @@ done
 
 #Compile
 compile_shadowsocks() {
+#Remove ss service
+remove_shadowsocks
 cd /usr/local/src
-#Check if shadowsocks-libev direcotory exists
-ls shadowsocks-libev &>/dev/null && rm -rf shadowsocks-libev/
-#Download the source code
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 
 if [ $? -eq 0 ]; then
@@ -77,19 +83,18 @@ if [ $? -eq 0 ]; then
     ./autogen.sh
     ./configure --disable-documentation
     make && make install &&
-    echo "installation succeeded!"
-    exit 0
+    printf "${RED}%s${NC}\x21\n" "installation succeeded"
+    #NOT USE exit 0 otherwise the script will exit without run the following functions/commands!!!
 else 
-    echo "Something wrong, exit..." >&2
+    echo "Installation failed, please check" >&2
     exit 1
 fi
 }
 
-#Get port number
 set_port() {
 read -p "Please set up a server port(Default: 18388): " server_port
 
-#Check if port valid
+#Validity checkup
 while [[ ! ( ${server_port:=18388} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
   read server_port
@@ -99,11 +104,11 @@ printf "%s${RED}%s${NC}\n" "You have selected server port: " "$server_port."
 }
 
 set_ip() {
-read -p "Please set up server address: " server_address
-printf "%s${RED}%s${NC}\n" "You have selected server address: " "$server_address."
+    #use <<< instead of <<
+    read -p "Please set up server address: " server_address <<<$(curl -sSL ifconfig.co | xargs)
+    printf "%s${RED}%s${NC}\n" "You have selected server address: " "$server_address."
 }
 
-#Get ciper method
 set_cipher() {
 
 ciphers=(
@@ -114,14 +119,12 @@ xchacha20-ietf-poly1305
 )
 
 PS3="Please pick up a preferred cipher..."
-#Force select menu display in one single column.
-COLUMNS=0
+COLUMNS=0 #Force select menu display in one single column.
 select cipher in "${ciphers[@]}";
 do
-    #Use extended globbing
     case $cipher in 
       aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
-        #Escape !
+      #Escape !
       printf "%s${RED}%s${NC}\x21\n" "You selected " "$cipher"
       cipher=$cipher
       break
@@ -139,9 +142,10 @@ mkdir -p ${CONFIG_DIR}
 cd ${CONFIG_DIR}
 
 #超时时间越长，连接被保持得也就越长，导致并发的tcp的连接数也就越多。对于公共代理，这个值应该调整得小一些。推荐60秒。
+#comment not allowed in here doc. Use 0.0.0.0
 cat > config.json <<eof
 {
-  "server":"$server_address",
+  "server":"0.0.0.0",
   "server_port":"$server_port",
   "local_address":"127.0.0.1",
   "local_port":1080,
@@ -156,18 +160,39 @@ eof
 }
 
 install_shadowsocks() {
-#Change ExecStart from /usr/bin/ to /usr/local/bin
-cd ${INSTALL_DIR}/rpm/SOURCES/systemd/
-sed -i.bak -e '/ExecStart/{s_/usr/bin_usr/local/bin_;}' -e '/ExecStart/aExecPreStart=/bin/sh -c "ulimit -n 51200"' shadowsocks-libev.service
-cp shadowsocks-libev.service /usr/lib/systemd/system/
+cd "${INSTALL_DIR}"/rpm/SOURCES/systemd/
+
+#Local install in /usr/local
+sed -i.bak -e '/ExecStart/{s!/usr/bin!/usr/local/bin!;}' shadowsocks-libev.service
+cp shadowsocks-libev.service /usr/lib/systemd/system/ 
 cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
 
 #Enable and start service
-systemctl enable --now shadowsocks-libev
+systemctl enable --now shadowsocks-libev 
+[[ $? != 0 ]] && printf "%s\x21\n" "Something wrong" 
 
 }
 
-#Firewall settings
+remove_shadowsocks() {
+#Remove shadowsocks-libev service
+#systemctl disable --now shadowsocks-libev
+
+if systemctl -q is-active; then
+    systemctl stop shadowsocks-libev
+fi
+
+if systemctl -q is-enabled; then
+    systemctl disable shadowsocks-libev
+fi
+
+rm -rf ${INSTALL_DIR}
+rm -f  /usr/lib/systemd/system/shadowsocks-libev.service
+rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default 
+systemctl daemon-reload
+systemctl reset-failed #disable failed warning message after removed
+
+}
+
 check_firewall() {
     if systemctl -q is-active; then
         return 0
@@ -196,7 +221,7 @@ trim_whitespace() {
     printf "%s" "$var"
 }
 
-whitelist_port() {
+enable_port() {
     local PORT="$(trim_whitespace ${1})"
     if enable_firewall; then
         firewall-cmd --permanent --zone=public \
@@ -206,6 +231,14 @@ whitelist_port() {
         printf "%s\n" "Firewall is not enabled yet, exiting..."
         exit 1
     fi
+}
+
+info() {
+    printf "%s\n" "Installed successfully, enjoyed it..."
+    printf "%s${RED}%s${NC};\n" "Server address: " "$server_address"
+    printf "%s${RED}%s${NC};\n" "Server port: " "$server_port"
+    printf "%s${RED}%s${NC};\n" "Cipher: " "$cipher"
+    printf "%s\n" "Finished, bye"
 }
 
 main
