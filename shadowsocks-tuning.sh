@@ -63,8 +63,9 @@ EOF
 
     cd "${INSTALL_DIR}"
     #LimitNOFILE must be same as ulimit -n
+    #sed c\ to replace whole line or using .*
     sed -i -e '/ExecStart/iExecStartPre=/bin/sh -c "ulimit -n 65535"' \
-           -e '/LimitNOFILE/{s:*:LimitNOFILE=65535:}' shadowsocks-libev.service
+           -e '/LimitNOFILE/c\LimitNOFILE=65535' shadowsocks-libev.service
 }
 
 reload_shadowsocks() {
