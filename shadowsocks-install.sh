@@ -149,7 +149,7 @@ eof
 install_shadowsocks() {
 cd "${INSTALL_DIR}"/rpm/SOURCES/systemd/
 
-#Local install in /usr/local
+#Installation in /usr/local
 sed -i.bak -e '/ExecStart/{s!/usr/bin!/usr/local/bin!;}' shadowsocks-libev.service
 cp shadowsocks-libev.service /usr/lib/systemd/system/ 
 cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
