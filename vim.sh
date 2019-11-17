@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#Strict mode
+
 #Global vim configs
 cat >>/etc/vimrc <<EOF
 
