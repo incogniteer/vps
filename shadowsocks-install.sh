@@ -156,6 +156,7 @@ cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
 
 #Enable and start service
 systemctl enable --now shadowsocks-libev 
+echo "exit code is: $?"
 
 }
 
