@@ -38,6 +38,7 @@ NC='\033[0m'
 #immutable/unchangeable variable
 readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
 readonly CONFIG_DIR=/etc/shadowsocks-libev
+readonly SERVICE=shadowsocks-libev
 
 install_dependency() {
 dependencies=(
@@ -163,12 +164,12 @@ remove_shadowsocks() {
 #Remove shadowsocks-libev service
 #systemctl disable --now shadowsocks-libev
 
-if systemctl -q is-active; then
-    systemctl stop shadowsocks-libev
+if systemctl -q is-active ${SERVICE}; then
+    systemctl stop ${SERVICE} 
 fi
 
-if systemctl -q is-enabled; then
-    systemctl disable shadowsocks-libev
+if systemctl -q is-enabled ${SERVICE}; then
+    systemctl disable ${SERVICE}
 fi
 
 rm -rf ${INSTALL_DIR}
