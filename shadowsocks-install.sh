@@ -156,7 +156,6 @@ cp shadowsocks-libev.default /etc/sysconfig/shadowsocks-libev
 
 #Enable and start service
 systemctl enable --now shadowsocks-libev 
-[[ $? != 0 ]] && printf "%s\x21\n" "Something wrong" 
 
 }
 
