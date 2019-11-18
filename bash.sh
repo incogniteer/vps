@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 
-yum -y install wget screen vim 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+finish() {
+    printf "%s\n" "Something went wrong, exiting..."
+}
+
+trap finish ERR
+
+pkgs=(wget screen vim)
+for pkg in "${pkgs[@]}"; do
+    yum -y install $pkg
+done
+
+#Alternatively: timedatectl set-timezone Asia/Shanghai
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 #Add [ ] otherwise will report errors
-if [ $? -eq 0 ]; then
 cat >> /etc/bashrc <<EOF
 
 #User defined bash configs
@@ -58,6 +72,5 @@ export VISUAL="$(command -pv vim)"
 export EDITOR="$(command -pv vim)"
 
 EOF
-fi
 
 [ $? -eq 0 ] && . /etc/bashrc
