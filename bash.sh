@@ -10,7 +10,7 @@ finish() {
 
 trap finish ERR
 
-pkgs=(wget screen vim)
+pkgs=(wget screen vim epel-release)
 for pkg in "${pkgs[@]}"; do
     yum -y install $pkg
 done
