@@ -48,7 +48,7 @@ enable_forward() {
     local FROM_PORT=$2
     local TO_PORT=$3
 
-    if firewall-cmd --list-ports | tr -d '(/udp|/tcp)' | grep -w $FROM_PORT; then
+    if firewall-cmd --list-ports | tr -d '(/udp|/tcp)' | grep -wq $FROM_PORT; then
         :
     else
     firewall-cmd -q --permanent --zone=public --add-port=$FROM_PORT/{tcp,udp} &&
