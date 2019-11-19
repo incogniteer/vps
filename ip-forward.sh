@@ -49,7 +49,7 @@ enable_forward() {
     local TO_PORT=$3
 
     if firewall-cmd --list-ports | tr -d '(/udp|/tcp)' | grep -wq $FROM_PORT; then
-        :
+    printf "${RED}%s${NC}\x21\n" "$FROM_PORT already enabled"
     else
     firewall-cmd -q --permanent --zone=public --add-port=$FROM_PORT/{tcp,udp} &&
     printf "${RED}%s${NC}\x21\n" "$FROM_PORT added successfully"
