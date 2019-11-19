@@ -18,6 +18,9 @@ cleanup() {
     printf "${RED}%s${NC}\n" "Something is wrong, exiting..."
 }
 
+trap err ERR
+trap cleanup EXIT
+
 BWH=216.24.183.179
 HOSTDARE=185.238.250.78 
 VIRMACH=122.51.173.88
@@ -48,11 +51,13 @@ enable_forward() {
     if firewall-cmd --list-ports | tr -d '(/udp|/tcp)' | grep -w $FROM_PORT; then
         :
     else
-    firewall-cmd -q --permanent --zone=public --add-port=$FROM_PORT/{tcp,udp}
+    firewall-cmd -q --permanent --zone=public --add-port=$FROM_PORT/{tcp,udp} &&
+    printf "${RED}%s${NC}\x21\n" "$FROM_PORT added successfully"
     fi
 
-    firewall-cmd -q --permanent --zoone=public \
+    firewall-cmd -q --permanent --zone=public \
 --add-forward-port=port=${FROM_PORT}:proto={tcp,udp}:toport=${TO_PORT}:toaddr=${IP} && 
+    printf "${RED}%s${NC}\x21\n" "$FROM_PORT forwarded to $TO_PORT successfully" &&
     firewall-cmd -q --reload
 }
 
