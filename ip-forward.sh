@@ -14,12 +14,16 @@ err() {
     printf "${RED}%s${NC}\n" "Something is wrong, exiting..."
 }
 
-cleanup() {
+finish() {
+    if [[ $? == 0 ]]; then
+        printf "${RED}%s${NC}\n" "Run sucessfully, exiting..."
+    else
     printf "${RED}%s${NC}\n" "Something is wrong, exiting..."
+    fi
 }
 
 trap err ERR
-trap cleanup EXIT
+trap finish EXIT
 
 BWH=216.24.183.179
 HOSTDARE=185.238.250.78 
