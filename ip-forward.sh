@@ -23,7 +23,7 @@ trap cleanup EXIT
 
 BWH=216.24.183.179
 HOSTDARE=185.238.250.78 
-VIRMACH=122.51.173.88
+VIRMACH=107.174.240.124
 TXHK=124.156.100.46
 ALIHK=47.240.38.80
 
@@ -58,7 +58,7 @@ enable_forward() {
     firewall-cmd -q --permanent --zone=public \
 --add-forward-port=port=${FROM_PORT}:proto={tcp,udp}:toport=${TO_PORT}:toaddr=${IP} && 
     printf "${RED}%s${NC}\x21\n" "$FROM_PORT forwarded to $TO_PORT successfully" &&
-    firewall-cmd -q --reload
+    firewall-cmd -q --reload && printf "${RED}%s${NC}\x21\n" "Reloaded successfully"
 }
 
 enable_forward $BWH 18388 18388
