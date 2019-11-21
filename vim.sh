@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 #Strict mode
+set -ueo pipefail
+
+rpm --quiet -q vim && : || yum -y install vim
 
 #Global vim configs
 cat >>/etc/vimrc <<EOF
