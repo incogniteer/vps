@@ -35,8 +35,8 @@ ALIHK=47.240.38.80
 #Enable ipv4 forward
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/enable_ip_forward && sysctl -p /etc/sysctl.d/*
 
-#Enable firewalld
-! systemctl -q is-enabled firewalld >/dev/null 2>&1 &&
+#Enable & start firewalld
+! (systemctl -q is-enabled firewalld && systemctl -q is-active firewalld) >/dev/null 2>&1 &&
 systemctl -q enable --now firewalld
 
 #Enable masquerading
@@ -65,6 +65,7 @@ enable_forward() {
     firewall-cmd -q --reload && printf "${RED}%s${NC}\x21\n" "Reloaded successfully"
 }
 
+#Usage: enable_forward $IP $FROM_PORT $TO_PORT
 enable_forward $BWH 18388 18388
 enable_forward $VIRMACH 18188 18388
 enable_forward $HOSTDARE 18588 38888
