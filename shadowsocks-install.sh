@@ -184,7 +184,7 @@ rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default
 systemctl daemon-reload
 systemctl reset-failed #disable failed warning message after removed
 
-disable_port ${server_port}
+disable_port ${server_port:-18388}
 fi
 
 }
