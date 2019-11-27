@@ -165,7 +165,8 @@ remove_shadowsocks() {
 #systemctl disable --now shadowsocks-libev
 
 #first check if unit file exists
-[[ systemctl list-unit-files | grep -q 'shadowsocks-libev' ]] && {
+#This is wrong[[ systemctl list-unit-files | grep -q 'shadowsocks-libev' ]] &
+systemctl list-unit-files | grep -q 'shadowsocks-libev' && {
 if systemctl -q is-active ${SERVICE}; then
     systemctl stop ${SERVICE} 
 fi
@@ -176,7 +177,7 @@ fi
 }
 
 #This is wrong test, use -d or -f isntead: if [[ ${INSTALL_DIR} ]]; then
-if [[ -d ${INSTALL_DIR} ]]; then
+if [[ -d "${INSTALL_DIR}" ]]; then
 rm -rf ${INSTALL_DIR}
 rm -f  /usr/lib/systemd/system/shadowsocks-libev.service
 rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default 
