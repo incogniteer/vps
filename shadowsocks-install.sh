@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 #Unofficial bash strick mode!
-# set -euo pipefail with IFS=$'\n\t' #Bash $' \t'n' is too eager
+#Alternatively: set -euo pipefail 
+#IFS=$'\n\t', $' \t\n' is too eager
 set -o nounset #set -u
 set -o pipefail
 set -o errexit #set -e
@@ -9,11 +10,15 @@ set -o errexit #set -e
 DEBUG=true
 [[ "${DEBUG:-false}" == true ]] && set -o xtrace
 
+#ANSI C color code
+RED='\x1b[1;31m'
+NC='\x1b[0m'
+
 #bash cleanup for more robust and reliable script and less debugging!
 #cleanup code for ERR
 _err_trap() {
     local RETVAL=$?
-    printf "%s\n" "Something is wrong, exiting now..." >&2
+    printf "${RED}%s${NC}\n" "Error trapped, exiting now..." >&2
     exit $RETVAL
 }
 
@@ -23,18 +28,16 @@ trap _err_trap ERR
 _exit_trap() {
     local RETVAL=$?
     if [[ $RETVAL != 0 ]]; then
-    printf "%s\n" "Script is exiting by trapping...probably something wrong.."
+    printf "${RED}%s\x21${NC}\n" "Something is wrong, exiting now..." >&2
     exit $RETVAL
 else
-    printf "%s\x21\n" "Script run without problems"
+    printf "${RED}%s\x21  %s${NC}\n" "Run sucessfully" "Existing now..." >&2
 fi
     
 }
 
 trap _exit_trap EXIT 
 
-RED='\033[0;31m'
-NC='\033[0m'
 #immutable/unchangeable variable
 readonly INSTALL_DIR=/usr/local/src/shadowsocks-libev
 readonly CONFIG_DIR=/etc/shadowsocks-libev
