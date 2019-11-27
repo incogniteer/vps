@@ -12,7 +12,7 @@ trap finish ERR
 
 pkgs=(wget screen vim epel-release)
 for pkg in "${pkgs[@]}"; do
-    yum -y install $pkg
+    rpm -q "${pkg}" || yum -y install "${pkg}"
 done
 
 #Alternatively: timedatectl set-timezone Asia/Shanghai
