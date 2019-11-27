@@ -235,11 +235,13 @@ enable_port() {
 disable_port() {
     local PORT="$(trim_whitespace ${1})"
     if enable_firewall; then
+        #remove duplicate ports
+        firewall-cmd --list-ports | tr -d '\(tcp|udp)' | awk -v RS='[ \n]+' '!_[$0]++' | grep -q ${PORT} &&
         firewall-cmd --permanent --zone=public \
         --remove-port="${PORT}"/{tcp,udp} &&
         firewall-cmd --reload
     else
-        printf "%s\n" "Port are not disabled properly...please try again later."
+        printf "${RED}%s\x21${NC}\n" "Port are not disabled properly...please try again later." >&2
         exit 1
     fi
 }
