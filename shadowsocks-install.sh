@@ -73,7 +73,7 @@ if [ $? -eq 0 ]; then
     ./autogen.sh
     ./configure --disable-documentation
     make && make install &&
-    printf "${RED}%s${NC}\x21\n" "installation succeeded"
+    printf "${RED}%s${NC}\x21\n" "Shadowsocks-libev complied succeeded"
     #NOT USE exit 0 otherwise the script will exit without run the following functions/commands!!!
 else 
     echo "Installation failed, please check" >&2
