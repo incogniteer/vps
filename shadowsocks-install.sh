@@ -79,15 +79,17 @@ fi
 }
 
 set_port() {
-read -p "Please set up a server port(Default: 18388): " server_port
+#Enable timeout for read
+read -t10 -p "Please set up a server port(Default: 18388): " server_port
 
 #Validity checkup
 while [[ ! ( ${server_port:=18388} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
-  read server_port
+  read -t10 server_port
 done
 
-printf "%s${RED}%s${NC}\n" "You have selected server port: " "$server_port."
+#Set the default server_port for furhter use
+printf "%s${RED}%s${NC}\n" "You have selected server port: " "${server_port:=18388}."
 }
 
 set_ip() {
@@ -162,6 +164,8 @@ remove_shadowsocks() {
 #Remove shadowsocks-libev service
 #systemctl disable --now shadowsocks-libev
 
+#first check if unit file exists
+[[ systemctl list-unit-files | grep -q 'shadowsocks-libev' ]] && {
 if systemctl -q is-active ${SERVICE}; then
     systemctl stop ${SERVICE} 
 fi
@@ -169,8 +173,10 @@ fi
 if systemctl -q is-enabled ${SERVICE}; then
     systemctl disable ${SERVICE}
 fi
+}
 
-if [[ ${INSTALL_DIR} ]]; then
+#This is wrong test, use -d or -f isntead: if [[ ${INSTALL_DIR} ]]; then
+if [[ -d ${INSTALL_DIR} ]]; then
 rm -rf ${INSTALL_DIR}
 rm -f  /usr/lib/systemd/system/shadowsocks-libev.service
 rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default 
