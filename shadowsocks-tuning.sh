@@ -7,12 +7,11 @@ set -o pipefail
 
 #Environment
 readonly INSTALL_DIR="/usr/lib/systemd/system"
-
-tuning=/etc/sysctl.d/shadowsocks_tuning.conf
+readonly TUNING_FILE="/etc/sysctl.d/shadowsocks_tuning.conf"
 
 sysctl_tune() {
 
-cat >> "$tuning"  <<EOF
+cat >> "${TUNING_FILE}"  <<EOF 
 #Optimize shadowsocks connections
 
 # max write buffer
@@ -51,6 +50,8 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 net.ipv4.tcp_mtu_probing = 1
 EOF
 
+#sysctl --system
+sysctl -p "${TUNING_FILE}"
 }
 
 increase_nofile() {
