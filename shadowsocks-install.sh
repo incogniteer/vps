@@ -244,6 +244,7 @@ disable_port() {
         #printf "${RED}%s\x21${NC}\n" "Port are not disabled properly...please try again later." >&2
         #exit 1
         printf "%s\n" "${PORT} is not enabled yet, continu..."
+        fi
     fi
 }
 
