@@ -34,10 +34,12 @@ alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
 alias rmdir='rmdir -v'
+alias mkdir='mkdir -pv'
 alias cls="echo -en '\\x1bc'"
 alias vi=vim
 alias py='python3'
 alias sudo='sudo ' #Enable alias in sudo
+alias source='. ~/.bashrc'
 
 alias rmdir='rmdir -pv'
 alias path='echo -e ${PATH//:/\\n}'
@@ -49,7 +51,9 @@ alias sys='systemctl'
 alias syss='sys status -l'
 alias now='date +%T'
 alias nowd='date +%F'
+alias nowdate=nowd
 
+alias cd..='cd ..'
 alias ..='cd ../'
 alias ...='cd ../../'
 alias ....='cd ../../../'

@@ -32,3 +32,8 @@ killbash() {
         kill $pid
     done
 } 2>/dev/null
+
+mkcd() {
+    mkdir -pv $1;
+    cd $1;
+}
