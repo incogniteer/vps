@@ -44,8 +44,9 @@ readonly CONFIG_DIR=/etc/shadowsocks-libev
 readonly SERVICE=shadowsocks-libev
 
 install_dependency() {
+#firstly instal epel-release
 dependencies=(
-            asciidoc autoconf automake c-ares-devel epel-release
+            epel-release asciidoc autoconf automake c-ares-devel 
             gcc gettext git libev-devel libsodium libsodium-devel
             libtool make mbedtls mbedtls-devel pcre pcre-devel 
             screen wget xmlto
