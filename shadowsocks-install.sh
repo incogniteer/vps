@@ -54,12 +54,13 @@ dependencies=(
              )
 
 for package in "${dependencies[@]}"; do 
-    if rpm -q "$package" >/dev/null; then
+#rpm -q not working for vim!
+    if rpm -q "${package}" >/dev/null || which "${package}"; then
         #Put color code in format strings!
-        printf "%s${RED}%*s${NC}" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
+        printf "%s${RED}%*s${NC}" "${package}" $(($(tput cols)-$(printf "${package}"|wc -m))) "Installed"
         else
         printf "%s\n" "Starting to install $package..."
-        yum -y install "$package"
+        yum -y install "${package}"
     fi
 done
 }
