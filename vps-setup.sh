@@ -98,4 +98,7 @@ sed -i.bak -r \
 #Restart sshd
 cat /run/sshd.pid | xargs kill -HUP
 
+#dependency check
+rpm -q glibc || { echo 'Please install glibc firstly'; exit 1; }
 curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
+
