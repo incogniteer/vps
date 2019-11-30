@@ -32,8 +32,8 @@ ln -sf /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
 
 #hostname
 read -p "Please enter your hostname..." HOSTNAME
-readonly HOSTNAME="${HOSTNAME}"
-hostnamectl set-hostname "${HOSTNAME}"
+#this is no need at all: readonly HOSTNAME="${HOSTNAME}"
+hostnamectl set-hostname "${HOSTNAME:-myvps}"
 
 #add user
 useradd "${USER}"
