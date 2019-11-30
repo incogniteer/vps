@@ -11,7 +11,7 @@ readonly TUNING_FILE="/etc/sysctl.d/shadowsocks_tuning.conf"
 
 sysctl_tune() {
 
-cat >> "${TUNING_FILE}"  <<EOF 
+cat > "${TUNING_FILE}"  <<EOF 
 #Optimize shadowsocks connections
 
 # max write buffer
