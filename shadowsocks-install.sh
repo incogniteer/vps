@@ -91,6 +91,8 @@ rand_port() {
     #seq 2025 40000|sort -R|head -n1
     #n different from port
     local n=$((RANDOM+7233))
+    #initialize port unless unbound variable thrown
+    port=$((RANDOM+7233))
     while :; do
     if [[ $n =~ 4 ]]; then
         local n=$((RANDOM+7233))
@@ -109,7 +111,7 @@ set_port() {
 #need to use if statement; read -t10 -p "Please set up a server port(Default: 18388): " SERVER_PORT
 #Validity checkup
 default=$(rand_port)
-read -p "Please enter server port.Default: ${default}" SERVER_PORT
+read -p "Please enter server port(Default: ${default})..." SERVER_PORT
 while [[ ! ( ${SERVER_PORT:=${default}} =~ ^[[:digit:]]{4,5}$ && $SERVER_PORT -gt 1024 && $SERVER_PORT -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
   read SERVER_PORT
