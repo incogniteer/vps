@@ -86,8 +86,8 @@ Defaults:${USER}  timestamp_timeout=60
 EOF
 
 #enable firewall
-! systemctl is-enabled && firewalld systemctl enable --now firewalld
-! systemctl is-active && firewalld systemctl start firewalld
+! systemctl is-enabled firewalld && systemctl enable --now firewalld
+! systemctl is-active firewalld && systemctl start firewalld
 [[ $(firewall-cmd --get-default-zone) =~ public ]] ||  firewall-cmd --set-default-zone=public
 
 #ssh use no DNS to speed up
