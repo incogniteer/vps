@@ -105,7 +105,10 @@ curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
 #read will rturn 1 in this call way curl | bash
 #check process subsitituion vs pipe with read
 #use bash <(curl) is preferred always
-bash <(curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh)
+#error prone:bash <(curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh)
+curl -sSLo /tmp/shadowsocks-libev.sh https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh &&
+chmod 744 /tmp/shadowsocks-libev.sh
+/tmp/shadowsocks-libev.sh
 
 #bbr
 curl -sSL https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
