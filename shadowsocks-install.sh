@@ -84,18 +84,24 @@ else
 fi
 }
 
+#exclude 4 from output of shuf, seq, tr<urandom then choose
+#while true
 rand_port() {
-    #shuf -i 1025-4000 -n1
+    #port=$(shuf -i 1025-40000 -n1)
     #seq 2025 40000|sort -R|head -n1
     #n different from port
     local n=$((RANDOM+7233))
-    #while [[ ! $port =~ 4 ]]; do
-    if ! [[ $n =~ 4 ]]; then
-        port=$n
-    else
+    while :; do
+    if [[ $n =~ 4 ]]; then
         local n=$((RANDOM+7233))
+    else
+        port=$n
     fi
-    printf "%d" $port
+    if [[ ! $port =~ 4 ]]; then
+        printf "%d" $port
+        break
+    fi
+    done
 }
 
 set_port() {
