@@ -77,4 +77,4 @@ EOF
 
 #enable firewall
 systemctl enable --now firewalld
-
+[[ $(firewall-cmd --get-default-zone) =~ public }} ||  firewall-cmd --set-default-zone=public
