@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+DEBUG=true
+[[ "${DEBUG:-false}" == true ]] && set -o xtrace
 
 set -o errexit
 set -o nounset

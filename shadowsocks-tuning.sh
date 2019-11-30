@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DEBUG=true
+[[ "${DEBUG:-false}" == true ]] && set -o xtrace
+
 #Strick mode
 set -o errexit
 set -o nounset
