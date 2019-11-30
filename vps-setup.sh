@@ -35,11 +35,15 @@ read -p "Please enter your hostname..." HOSTNAME
 #this is no need at all: readonly HOSTNAME="${HOSTNAME}"
 hostnamectl set-hostname "${HOSTNAME:-myvps}"
 
+#check user exists
+getent passwd | cut -d: -f1 | grep ${USER} >/dev/null 2>&1 || {
+#[[ $(id -u ${USER}) > 0 ]] || {
 #add user
 useradd "${USER}"
 #need username for passwd --stdin
 echo "${PASSWD}" | passwd --stdin "${USER}"
 usermod -aG wheel "${USER}"
+}
 
 #firewalld important some vps not install firewalld
 packages=(
