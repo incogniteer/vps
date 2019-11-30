@@ -89,9 +89,11 @@ rand_port() {
     #n different from port
     local n=$((RANDOM+7233))
     #while [[ ! $port =~ 4 ]]; do
-    while ! [[ $n =~ 4 ]]; do
+    if ! [[ $n =~ 4 ]]; then
         port=$n
-    done
+    else
+        local n=$((RANDOM+7233))
+    fi
     printf "%d" $port
 }
 
@@ -271,7 +273,19 @@ info() {
     printf "%s\n" "Finished, bye"
 }
 
+is_root() {
+    if [[ $EUID != 0 ]]; then
+        printf "${RED}%s${NC}" "Please run as root user!"
+        exit 1
+    fi
+}
+
+os_ver() {
+    os_ver=$(rpm -q --queryformat '%{VERSION}' centos-release)
+}
+
 main() {
+    is_root
     install_dependency 
     remove_shadowsocks
     compile_shadowsocks
