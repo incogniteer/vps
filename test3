@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set_cipher() {
+
+ciphers=(
+aes-256-gcm 
+aes-256-cfb
+chacha20-ietf-poly1305
+xchacha20-ietf-poly1305
+)
+
+PS3="Please pick up a preferred cipher..."
+COLUMNS=0 #Force select menu display in one single column.
+select cipher in "${ciphers[@]}";
+do
+    case $cipher in 
+      aes-256-gcm|aes-256-cfb|chacha20-ietf-poly1305|xchacha20-ietf-poly1305)
+      #Escape !
+      printf "%s%s$x21\n" "You selected " "$cipher"
+      cipher=$cipher
+      break
+      ;;
+      *)
+      echo "Please select a valid cipher"! >&2
+      ;;
+    esac
+done
+
+}
+
+set_cipher
