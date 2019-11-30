@@ -6,6 +6,7 @@
 set -o nounset #set -u
 set -o pipefail
 set -o errexit #set -e
+set +o histexpand
 #set -o xtrace #set -x
 DEBUG=true
 [[ "${DEBUG:-false}" == true ]] && set -o xtrace
@@ -82,18 +83,31 @@ else
 fi
 }
 
+rand_port() {
+    #shuf -i 1025-4000 -n1
+    #seq 2025 40000|sort -R|head -n1
+    #n different from port
+    local n=$((RANDOM+7233))
+    #while [[ ! $port =~ 4 ]]; do
+    while ! [[ $n =~ 4 ]]; do
+        port=$n
+    done
+    printf "%d" $port
+}
+
 set_port() {
 #Enable timeout for read
-read -t10 -p "Please set up a server port(Default: 18388): " server_port
-
+#need to use if statement; read -t10 -p "Please set up a server port(Default: 18388): " server_port
 #Validity checkup
-while [[ ! ( ${server_port:=18388} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
+default=$(rand_port)
+read -p "Please enter server port.Default: ${default}" server_port
+while [[ ! ( ${server_port:=${default}} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
-  read -t10 server_port
+  read server_port
 done
 
 #Set the default server_port for furhter use
-printf "%s${RED}%s${NC}\n" "You have selected server port: " "${server_port:=18388}."
+printf "%s${RED}%s${NC}\n" "You have selected server port: " "${server_port}."
 }
 
 set_ip() {

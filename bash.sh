@@ -66,12 +66,13 @@ alias ret='echo $?'
 alias type='type -a'
 
 #Alternatively, [ -t 0 ] or if tty -s >/dev/null 2>&1; then
-[[ $- == *i* ]] && stty -ixon
+#[ -t 0 ] && stty -ixon
+#tty -s >/dev/null 2>&1 && stty -ixon
+# Turn on "Ctrl-s" for forward history search
 # stty command is executed only if a tty is attached to the process.
+[[ $- == *i* ]] && stty -ixon
 # stty istrip : Strip input characters to 7 bits
 tty -s && stty istrip
-# Turn on "Ctrl-s" for forward history search
-stty -ixon
 
 export VISUAL="$(command -pv vim)"
 export EDITOR="$(command -pv vim)"
