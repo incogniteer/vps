@@ -29,7 +29,8 @@ net.ipv4.tcp_syncookies = 1
 # reuse timewait sockets when safe
 net.ipv4.tcp_tw_reuse = 1
 # turn off fast timewait sockets recycling
-net.ipv4.tcp_tw_recycle = 0
+#tw_recycle has been removed from 4.12
+#net.ipv4.tcp_tw_recycle = 0
 # short FIN timeout
 net.ipv4.tcp_fin_timeout = 30
 # short keepalive time
