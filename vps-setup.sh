@@ -90,17 +90,6 @@ EOF
 ! systemctl is-active firewalld && systemctl start firewalld
 [[ $(firewall-cmd --get-default-zone) =~ public ]] ||  firewall-cmd --set-default-zone=public
 
-#ssh use no DNS to speed up
-#\w=[[:alnum:]_]=[0-9a-zA-Z_], \W=[^[:alnum:]_]
-#-r before -e
-#[[:lower:]] not [:lower:]
-sed -i.bak -r \
-    -e '/^#?UseDNS [[:lower:]]{2,3}$/{s/^#//;s/yes$/no/;}' \
-    -e '/^#?PasswordAuthentication [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
-    -e '/^#?PermitRootLogin [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
-    -e '/^#?PrintMotd [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
-/etc/ssh/sshd_config
-
 #remove duplicate lines
 #awk '/PasswordAuthentication/!seen[$0]++' /etc/ssh/sshd_config
 
@@ -120,4 +109,15 @@ curl -sSL https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
 
 #tuning
 curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-tuning.sh | bash
+
+#ssh use no DNS to speed up
+#\w=[[:alnum:]_]=[0-9a-zA-Z_], \W=[^[:alnum:]_]
+#-r before -e
+#[[:lower:]] not [:lower:]
+sed -i.bak -r \
+    -e '/^#?UseDNS [[:lower:]]{2,3}$/{s/^#//;s/yes$/no/;}' \
+    -e '/^#?PasswordAuthentication [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
+    -e '/^#?PermitRootLogin [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
+    -e '/^#?PrintMotd [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
+/etc/ssh/sshd_config
 
