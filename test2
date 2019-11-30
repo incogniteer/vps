@@ -34,5 +34,7 @@ while [[ ! ( ${SERVER_PORT:=${default}} =~ ^[[:digit:]]{4,5}$ && $SERVER_PORT -g
 done
 
 #Set the default SERVER_PORT for furhter use
-printf "%s${RED}%s${NC}\n" "You have selected server port: " "${SERVER_PORT}."
+printf "%s%s\n" "You have selected server port: " "${SERVER_PORT}."
 }
+
+set_port
