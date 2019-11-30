@@ -97,17 +97,17 @@ rand_port() {
 
 set_port() {
 #Enable timeout for read
-#need to use if statement; read -t10 -p "Please set up a server port(Default: 18388): " server_port
+#need to use if statement; read -t10 -p "Please set up a server port(Default: 18388): " SERVER_PORT
 #Validity checkup
 default=$(rand_port)
-read -p "Please enter server port.Default: ${default}" server_port
-while [[ ! ( ${server_port:=${default}} =~ ^[[:digit:]]{4,5}$ && $server_port -gt 1024 && $server_port -lt 65535 ) ]]; do
+read -p "Please enter server port.Default: ${default}" SERVER_PORT
+while [[ ! ( ${SERVER_PORT:=${default}} =~ ^[[:digit:]]{4,5}$ && $SERVER_PORT -gt 1024 && $SERVER_PORT -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
-  read server_port
+  read SERVER_PORT
 done
 
-#Set the default server_port for furhter use
-printf "%s${RED}%s${NC}\n" "You have selected server port: " "${server_port}."
+#Set the default SERVER_PORT for furhter use
+printf "%s${RED}%s${NC}\n" "You have selected server port: " "${SERVER_PORT}."
 }
 
 set_ip() {
@@ -154,7 +154,7 @@ cd ${CONFIG_DIR}
 cat > config.json <<eof
 {
   "server":"0.0.0.0",
-  "server_port":"$server_port",
+  "server_port":"$SERVER_PORT",
   "password":"884595ds12",
   "timeout":60,
   "method":"$cipher",
@@ -202,7 +202,7 @@ rm -f /etc/sysconfig/shadowsocks-libev/shadowsocks-libev.default
 systemctl daemon-reload
 systemctl reset-failed #disable failed warning message after removed
 
-disable_port ${server_port:-18388}
+disable_port ${SERVER_PORT:-18388}
 fi
 
 }
@@ -265,8 +265,8 @@ disable_port() {
 
 info() {
     printf "%s\n" "Installed successfully, enjoyed it..."
-    printf "%s${RED}%s${NC};\n" "Server address: " "$server_address"
-    printf "%s${RED}%s${NC};\n" "Server port: " "$server_port"
+    printf "%s${RED}%s${NC};\n" "Server address: " "${SERVER_ADDR}"
+    printf "%s${RED}%s${NC};\n" "Server port: " "${SERVER_PORT}"
     printf "%s${RED}%s${NC};\n" "Cipher: " "$cipher"
     printf "%s\n" "Finished, bye"
 }
@@ -280,7 +280,7 @@ main() {
     set_cipher
     config_shadowsocks
     install_shadowsocks
-    enable_port $server_port  #not forget to ref $1
+    enable_port ${SERVER_PORT}  #not forget to ref $1
     info
 }
 
