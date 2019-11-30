@@ -114,8 +114,8 @@ printf "%s${RED}%s${NC}\n" "You have selected server port: " "${SERVER_PORT}."
 
 set_ip() {
     #use <<< instead of <<
-    read -p "Please set up server address: " server_address <<<$(curl -sSL ifconfig.co | xargs)
-    printf "%s${RED}%s${NC}\n" "You have selected server address: " "$server_address."
+    read -p "Please set up server address: " SERVER_ADDR <<<$(curl -sSL ifconfig.co | xargs)
+    printf "%s${RED}%s${NC}\n" "You have selected server address: " "${SERVER_ADDR}."
 }
 
 set_cipher() {
@@ -281,7 +281,8 @@ is_root() {
 }
 
 os_ver() {
-    os_ver=$(rpm -q --queryformat '%{VERSION}' centos-release)
+    local OS_VER=$(rpm -q --queryformat '%{VERSION}' centos-release)
+    printf "%s" ${OS_VER}
 }
 
 main() {
