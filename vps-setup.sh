@@ -10,7 +10,6 @@ set +o histexpand
 
 readonly RED='\x1b[1;31m' 
 readonly NC='\x1b[0m'
-readonly ROOTPASSWD='884595ds12'
 readonly PASSWD='884595ds12'
 readonly HOSTNAME='bwh2'
 readonly USER='incognito'
@@ -25,7 +24,9 @@ finish() {
 
 trap finish EXIT ERR
 
-echo "${PASSWD}" | passwd --stdin
+read -p "Please enter password for root...:" ROOTPASSWD
+#need username for passwd --stdin
+echo "${ROOTPASSWD}" | passwd --stdin root
 
 ln -sf /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
 #timedatectl set-timezone Asia/Hong_Kong
@@ -34,7 +35,8 @@ hostnamectl set-hostname "${HOSTNAME}"
 
 #add user
 useradd "${USER}"
-echo "${PASSWD}" | passwd --stdin
+#need username for passwd --stdin
+echo "${PASSWD}" | passwd --stdin "${USER}"
 usermod -aG wheel "${USER}"
 
 packages=(
