@@ -106,15 +106,16 @@ sed -i.bak -r \
 cat /run/sshd.pid | xargs kill -HUP
 
 #dependency check
+#eval not needed !
 rpm -q glibc || { echo 'Please install glibc firstly'; exit 1; }
-eval curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
+curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
 
 #shadowsocks-libev
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh | bash
+curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh | bash
 
 #bbr
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
+curl -sSL https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
 
 #tuning
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/shadowsocks-tuning.sh | bash
+curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-tuning.sh | bash
 
