@@ -39,6 +39,7 @@ useradd "${USER}"
 echo "${PASSWD}" | passwd --stdin "${USER}"
 usermod -aG wheel "${USER}"
 
+#firewalld important some vps not install firewalld
 packages=(
     epel-release
     vim
@@ -47,6 +48,7 @@ packages=(
     wget
     curl
     glibc
+    firewalld
 )
 
 for package in ${packages[@]}; do
