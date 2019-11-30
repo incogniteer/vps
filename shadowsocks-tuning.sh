@@ -4,6 +4,18 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set +o histexpand
+
+#trap is very important
+finish() {
+    if [[ "${?}" == 0 ]]; then
+        printf "${RED}%s${NC}\n" "Run successfully! Existing now..."
+    else
+        printf "${RED}%s${NC}\n" "Something wrong, exiting..."
+    fi
+}
+
+trap finish EXIT ERR
 
 #Environment
 readonly INSTALL_DIR="/usr/lib/systemd/system"
