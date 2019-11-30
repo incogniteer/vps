@@ -102,7 +102,10 @@ rpm -q glibc || { echo 'Please install glibc firstly'; exit 1; }
 curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
 
 #shadowsocks-libev
-curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh | bash
+#read will rturn 1 in this call way curl | bash
+#check process subsitituion vs pipe with read
+#use bash <(curl) is preferred always
+bash <(curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh)
 
 #bbr
 curl -sSL https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
