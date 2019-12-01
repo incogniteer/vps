@@ -92,18 +92,20 @@ rand_port() {
     #n different from port
     local n=$((RANDOM+7233))
     #initialize port unless unbound variable thrown
-    port=$((RANDOM+7233))
+    #port=$((RANDOM+7233))
     while :; do
     if [[ $n =~ 4 ]]; then
-        local n=$((RANDOM+7233))
+        n=$((RANDOM+7233))
     else
         port=$n
-    fi
-    if [[ ! $port =~ 4 ]]; then
-        printf "%d" $port
         break
     fi
+#    if [[ ! $port =~ 4 ]]; then
+#        printf "%d" $port
+#        break
+#    fi
     done
+    printf '%d' ${port}
 }
 
 set_port() {
