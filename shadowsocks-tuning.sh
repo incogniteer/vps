@@ -9,6 +9,10 @@ set -o nounset
 set -o pipefail
 set +o histexpand
 
+readonly RED='\x1b[1;31m'
+readonly NC='\x1b[0m'
+
+
 #trap is very important
 finish() {
     if [[ "${?}" == 0 ]]; then
