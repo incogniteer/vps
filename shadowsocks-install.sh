@@ -54,12 +54,13 @@ dependencies=(
              )
 
 for package in "${dependencies[@]}"; do 
-    if rpm -q "$package" >/dev/null; then
+#rpm -q not working for vim!
+    if rpm -q "${package}" >/dev/null || which "${package}"; then
         #Put color code in format strings!
-        printf "%s${RED}%*s${NC}" "$package" $(($(tput cols)-$(printf "$package"|wc -m))) "Installed"
+        printf "%s${RED}%*s${NC}" "${package}" $(($(tput cols)-$(printf "${package}"|wc -m))) "Installed"
         else
         printf "%s\n" "Starting to install $package..."
-        yum -y install "$package"
+        yum -y install "${package}"
     fi
 done
 }
@@ -83,18 +84,26 @@ else
 fi
 }
 
+#exclude 4 from output of shuf, seq, tr<urandom then choose
+#while true
 rand_port() {
-    #shuf -i 1025-4000 -n1
+    #port=$(shuf -i 1025-40000 -n1)
     #seq 2025 40000|sort -R|head -n1
     #n different from port
     local n=$((RANDOM+7233))
-    #while [[ ! $port =~ 4 ]]; do
-    if ! [[ $n =~ 4 ]]; then
-        port=$n
-    else
+    #initialize port unless unbound variable thrown
+    port=$((RANDOM+7233))
+    while :; do
+    if [[ $n =~ 4 ]]; then
         local n=$((RANDOM+7233))
+    else
+        port=$n
     fi
-    printf "%d" $port
+    if [[ ! $port =~ 4 ]]; then
+        printf "%d" $port
+        break
+    fi
+    done
 }
 
 set_port() {
@@ -102,7 +111,7 @@ set_port() {
 #need to use if statement; read -t10 -p "Please set up a server port(Default: 18388): " SERVER_PORT
 #Validity checkup
 default=$(rand_port)
-read -p "Please enter server port.Default: ${default}" SERVER_PORT
+read -p "Please enter server port(Default: ${default})..." SERVER_PORT
 while [[ ! ( ${SERVER_PORT:=${default}} =~ ^[[:digit:]]{4,5}$ && $SERVER_PORT -gt 1024 && $SERVER_PORT -lt 65535 ) ]]; do
   echo -n "Please enter port number between 1024 and 65535: "
   read SERVER_PORT

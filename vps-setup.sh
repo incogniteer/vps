@@ -10,9 +10,7 @@ set +o histexpand
 
 readonly RED='\x1b[1;31m' 
 readonly NC='\x1b[0m'
-readonly ROOTPASSWD='884595ds12'
 readonly PASSWD='884595ds12'
-readonly HOSTNAME='bwh2'
 readonly USER='incognito'
 
 finish() {
@@ -25,18 +23,29 @@ finish() {
 
 trap finish EXIT ERR
 
-echo "${PASSWD}" | passwd --stdin
+read -p "Please enter password for root...:" ROOTPASSWD
+#need username for passwd --stdin
+echo "${ROOTPASSWD}" | passwd --stdin root
 
 ln -sf /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
 #timedatectl set-timezone Asia/Hong_Kong
 
-hostnamectl set-hostname "${HOSTNAME}"
+#hostname
+read -p "Please enter your hostname..." HOSTNAME
+#this is no need at all: readonly HOSTNAME="${HOSTNAME}"
+hostnamectl set-hostname "${HOSTNAME:-myvps}"
 
+#check user exists
+getent passwd | cut -d: -f1 | grep ${USER} >/dev/null 2>&1 || {
+#[[ $(id -u ${USER}) > 0 ]] || {
 #add user
 useradd "${USER}"
-echo "${PASSWD}" | passwd --stdin
+#need username for passwd --stdin
+echo "${PASSWD}" | passwd --stdin "${USER}"
 usermod -aG wheel "${USER}"
+}
 
+#firewalld important some vps not install firewalld
 packages=(
     epel-release
     vim
@@ -45,6 +54,7 @@ packages=(
     wget
     curl
     glibc
+    firewalld
 )
 
 for package in ${packages[@]}; do
@@ -80,8 +90,35 @@ Defaults:${USER}  timestamp_timeout=60
 EOF
 
 #enable firewall
-systemctl enable --now firewalld
+! systemctl is-enabled firewalld && systemctl enable --now firewalld
+! systemctl is-active firewalld && systemctl start firewalld
 [[ $(firewall-cmd --get-default-zone) =~ public ]] ||  firewall-cmd --set-default-zone=public
+
+#remove duplicate lines
+#awk '/PasswordAuthentication/!seen[$0]++' /etc/ssh/sshd_config
+
+#Restart sshd
+cat /run/sshd.pid | xargs kill -HUP
+
+#dependency check
+#eval not needed !
+rpm -q glibc || { echo 'Please install glibc firstly'; exit 1; }
+curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
+
+#shadowsocks-libev
+#read will rturn 1 in this call way curl | bash
+#check process subsitituion vs pipe with read
+#use bash <(curl) is preferred always
+#error prone:bash <(curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh)
+curl -sSLo /tmp/shadowsocks-libev.sh https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh &&
+chmod 744 /tmp/shadowsocks-libev.sh
+/tmp/shadowsocks-libev.sh
+
+#bbr
+curl -sSL https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
+
+#tuning
+curl -sSL https://github.com/incogniteer/vps/raw/master/shadowsocks-tuning.sh | bash
 
 #ssh use no DNS to speed up
 #\w=[[:alnum:]_]=[0-9a-zA-Z_], \W=[^[:alnum:]_]
@@ -93,23 +130,4 @@ sed -i.bak -r \
     -e '/^#?PermitRootLogin [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
     -e '/^#?PrintMotd [[:lower:]]{2,3}$/{s/yes$/no/;s/^#//;}' \
 /etc/ssh/sshd_config
-
-#remove duplicate lines
-#awk '/PasswordAuthentication/!seen[$0]++' /etc/ssh/sshd_config
-
-#Restart sshd
-cat /run/sshd.pid | xargs kill -HUP
-
-#dependency check
-rpm -q glibc || { echo 'Please install glibc firstly'; exit 1; }
-eval curl -sSL https://github.com/incogniteer/vps/raw/master/kernel-upgrade.sh | bash
-
-#shadowsocks-libev
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/shadowsocks-install.sh | bash
-
-#bbr
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/bbr.sh | bash
-
-#tuning
-eval curl -sSLO https://github.com/incogniteer/vps/raw/master/shadowsocks-tuning.sh | bash
 
