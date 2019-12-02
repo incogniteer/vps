@@ -25,8 +25,11 @@ finish() {
 trap err ERR
 trap finish EXIT
 
-BWH=216.24.183.179
-HOSTDARE=185.238.250.78 
+BWH1=216.24.183.179
+BWH2=199.19.111.45
+HOSTDARE1=185.238.250.78 
+HOSTDARE2=103.99.178.243 
+PR=155.94.151.120
 VIRMACH=107.174.240.124
 TXHK=124.156.100.46
 ALIHK=47.240.38.80
@@ -66,8 +69,11 @@ enable_forward() {
 }
 
 #Usage: enable_forward $IP $FROM_PORT $TO_PORT
-enable_forward $BWH 18388 18388
+enable_forward $BWH1 18388 18388
+enable_forward $BWH2 18288 25123
 enable_forward $VIRMACH 18188 18388
-enable_forward $HOSTDARE 18588 38888
+enable_forward $HOSTDARE1 18588 38888
+enable_forward $HOSTDARE2 18788 36532
+enable_forward $PR 19888 18063
 enable_forward $TXHK 18888 18888
 enable_forward $ALIHK 18688 18388
