@@ -3,6 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set -o +histexpand
 
 RED='\033[0;31m'
 NC='\033[0m'
@@ -54,18 +55,23 @@ enable_forward() {
     local IP=$1
     local FROM_PORT=$2
     local TO_PORT=$3
+    local OPEN_PORTS=$(firewall-cmd --list-ports | tr -d '(/udp|/tcp)' \
+        awk -v RS="[ \n]+" '!seen[$0]++') 
 
-    if firewall-cmd --list-ports | tr -d '(/udp|/tcp)' | grep -wq $FROM_PORT; then
-    printf "${RED}%s${NC}\x21\n" "$FROM_PORT already enabled"
+    if [[ "${OPEN_PORTS}" =~ $FROM_PORT ; then
+    printf "${RED}%s${NC}\n" "$FROM_PORT already enabled!"
     else
     firewall-cmd -q --permanent --zone=public --add-port=$FROM_PORT/{tcp,udp} &&
-    printf "${RED}%s${NC}\x21\n" "$FROM_PORT added successfully"
+    printf "${RED}%s${NC}\n" "$FROM_PORT whitelisted successfully!"
     fi
 
     firewall-cmd -q --permanent --zone=public \
 --add-forward-port=port=${FROM_PORT}:proto={tcp,udp}:toport=${TO_PORT}:toaddr=${IP} && 
-    printf "${RED}%s${NC}\x21\n" "$FROM_PORT forwarded to $TO_PORT successfully" &&
-    firewall-cmd -q --reload && printf "${RED}%s${NC}\x21\n" "Reloaded successfully"
+    printf "${RED}%s${NC}\n" "$FROM_PORT forwarded to $TO_PORT successfully!"
+}
+
+reload_firewall() {
+    firewall-cmd -q --reload && printf "${RED}%s${NC}\n" "Reloaded successfully!"
 }
 
 #Usage: enable_forward $IP $FROM_PORT $TO_PORT
@@ -77,3 +83,6 @@ enable_forward $HOSTDARE2 18788 36532
 enable_forward $PR 19888 18063
 enable_forward $TXHK 18888 18888
 enable_forward $ALIHK 18688 18388
+
+#Reload firewalld to apply the changes
+reload_firewall
