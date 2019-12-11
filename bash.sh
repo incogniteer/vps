@@ -27,7 +27,7 @@ done
 ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
 #Add [ ] otherwise will report errors
-cat > /etc/profile.d/alias.sh <<EOF
+cat > /etc/profile.d/alias.sh <<'EOF'
 #Common aliases
 alias ls='ls --color=auto'
 alias l.='ls -d .*'
@@ -74,7 +74,9 @@ alias type='type -a'
 alias r='fc -s' #Use fc alias fc -s pat=rep cmd
 EOF
 
-cat >/etc/profile.d/func.sh <<EOF
+#EOF should be quoted to avoid parameter expansion on EOF
+#And avoid unbound variable prompt
+cat >/etc/profile.d/func.sh <<'EOF'
 #Bash functions definitions
 # kill bash sessions
 killbash () {
@@ -121,7 +123,7 @@ mkcd() {
 EOF
 
 
-cat >/etc/profile.d/misc.sh <<EOF
+cat >/etc/profile.d/misc.sh <<'EOF'
 # history related items
 shopt -s histappend
 HISTFILE=~/.bash_history
