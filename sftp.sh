@@ -32,7 +32,7 @@ add_ftpuser() {
 # create dedicated SFTP user and group
 groupadd sftpusers
 useradd -g sftpusers -s /sbin/nologin ftpuser1
-printf '%s' "${rand_passwd}" | passwd --stdin ftpuser1
+printf '%s' "${passwd}" | passwd --stdin ftpuser1
 }
 
 modify_sshd() {
@@ -42,7 +42,7 @@ modify_sshd() {
 if grep -q "^Subsystem" /etc/ssh/sshd_config; then
     sed -i 's/^Subsystem.*/#&/' /etc/ssh/sshd_config
     sed -i '/^Subsystem.*/a \
-        Subsystem sftp internal-sftp'
+        Subsystem sftp internal-sftp' /etc/ssh/sshd_config
     # or awk '/^Subsystem.*/ {print "Subsystem sftp internal-sftp"} 1'
 else
     echo 'Subsystem sftp internal-sftp' >> /etc/ssh/sshd_config
@@ -60,10 +60,10 @@ EOF
 
 add_ftp_directory() {
 # create dedicated direcotyr for sftp
-chown -R root /home/sftpuser1
-chmod -R 755 /home/sftpuser1
-mkdir -p /home/sftpuser1/sftp-data
-chown -R sftpuser1 /home/sftpuser1/sftp-data
+chown -R root /home/ftpuser1
+chmod -R 755 /home/ftpuser1
+mkdir -p /home/ftpuser1/ftp-data
+chown -R sftpuser1 /home/ftpuser1/ftp-data
 }
 
 ### main ###
