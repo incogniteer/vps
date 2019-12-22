@@ -63,7 +63,7 @@ add_ftp_directory() {
 chown -R root /home/ftpuser1
 chmod -R 755 /home/ftpuser1
 mkdir -p /home/ftpuser1/ftp-data
-chown -R sftpuser1 /home/ftpuser1/ftp-data
+chown -R ftpuser1 /home/ftpuser1/ftp-data
 }
 
 ### main ###
