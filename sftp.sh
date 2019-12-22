@@ -3,6 +3,10 @@
 umask 0022
 PATH='/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin:/usr/local/sbin'
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 check_user() {
     if [[ $(whoami) != 'root' ]]; then
     # if [[ ${EUID} != 0 ]]; then
