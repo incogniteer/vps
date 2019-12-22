@@ -47,7 +47,6 @@ if grep -q "^Subsystem" /etc/ssh/sshd_config; then
 else
     echo 'Subsystem sftp internal-sftp' >> /etc/ssh/sshd_config
 fi
-}
 
 # restrict sftpusers access
 cat <<'EOF' >> /etc/ssh/sshd_config
