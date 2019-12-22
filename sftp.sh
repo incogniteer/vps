@@ -50,6 +50,7 @@ fi
 
 # restrict sftpusers access
 cat <<'EOF' >> /etc/ssh/sshd_config
+
 Match Group sftpusers
 X11Forwarding no
 AllowTcpForwarding no
