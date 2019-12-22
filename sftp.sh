@@ -22,14 +22,19 @@ rand_passwd() {
     head -c ${default_length}; echo
 }
 
+generate_passwd() {
 passwd=$(rand_passwd)
 echo "${passwd}" >> /root/rand_passwd
+}
 
+add_ftpuser() {
 # create dedicated SFTP user and group
 groupadd sftpusers
 useradd -g sftpusers -s /sbin/nologin ftpuser1
 printf '%s' "${rand_passwd}" | passwd --stdin ftpuser1
+}
 
+modify_sshd() {
 # replace Subsystem sftp /usr/libexec/openssh/sftp-server with
 # Subsystem sftp internal-sftp
 
@@ -50,11 +55,24 @@ AllowTcpForwarding no
 ChrootDirectory %h
 ForceCommand internal-sftp
 EOF
+}
 
-systemctl reload sshd
-
+add_ftp_directory() {
 # create dedicated direcotyr for sftp
 chown -R root /home/sftpuser1
 chmod -R 755 /home/sftpuser1
 mkdir -p /home/sftpuser1/sftp-data
 chown -R sftpuser1 /home/sftpuser1/sftp-data
+}
+
+### main ###
+main() {
+check_user
+generate_passwd
+add_ftpuser
+modify_sshd
+add_ftp_directory
+systemctl reload sshd
+}
+
+main
