@@ -15,6 +15,7 @@ syntax on
 colorscheme desert
 filetype plugin indent on
 set nocompatible
+set encoding=utf-8
 
 " Tab 
 set tabstop=4

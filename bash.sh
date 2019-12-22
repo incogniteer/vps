@@ -140,6 +140,8 @@ tty -s && stty istrip
 
 [[ $- == *i* ]] && stty -ixon
 
+# useful environment variables for visudo, sudoedit, fc
 export VISUAL="$(command -pv vim)"
 export EDITOR="$(command -pv vim)"
+export FCEDIT="$(command -pv vim)"
 EOF
