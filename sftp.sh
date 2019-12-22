@@ -13,6 +13,7 @@ check_user() {
         echo 'Must run as root!'
         exit 1
     fi
+}
 
 rand_passwd() {
     local default_length
