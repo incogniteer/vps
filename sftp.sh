@@ -41,7 +41,8 @@ modify_sshd() {
 
 if grep -q "^Subsystem" /etc/ssh/sshd_config; then
     sed -i 's/^Subsystem.*/#&/' /etc/ssh/sshd_config
-    sed -i '/^Subsystem.*/a \
+    # attention Subsystem now become #Subsystem
+    sed -i '/^#Subsystem.*/a \
         Subsystem sftp internal-sftp' /etc/ssh/sshd_config
     # or awk '/^Subsystem.*/ {print "Subsystem sftp internal-sftp"} 1'
 else
