@@ -109,7 +109,10 @@ colorscheme morning
 set cursorline
 hi cursoline cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 
+" support chinese charset
 set encoding=utf-8
+set fileencoding=utf-8,gbk,utf-16le,cp1252,iso8859-15,ucs-bom                       
+set termencdoing=utf-8
 
 " exit visual model in vim immediately
 set timeoutlen=1000 ttimeoutlen=0
