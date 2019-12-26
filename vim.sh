@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
 #Strict mode
-set -ueo pipefail
+set nounset
+set errexit
+set pipefail
+set +o histexpand
+
+check_user() {
+    if [[ $EUID != 0 ]]; then
+        echo "Must be root to run this script!"
+    fi
 
 rpm --quiet -q vim && : || yum -y install vim
 

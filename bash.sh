@@ -72,6 +72,9 @@ alias ret='echo $?'
 alias path='echo -e ${PATH//:/\\n}'
 alias type='type -a'
 alias r='fc -s' #Use fc alias fc -s pat=rep cmd
+alias chown='chown -v'
+alias chmod='chmod -v'
+
 EOF
 
 #EOF should be quoted to avoid parameter expansion on EOF
