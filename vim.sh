@@ -86,6 +86,10 @@ set ttyfast
 " status bar
 set laststatus=2
 
+" set last status content
+" backslash to escape the spacing(whitespace)
+set statusline=%F%r\ [HEX=%B]\ [%l,\ %v,\ %P]\ %{strftime(\"%H:%M\")}
+
 " last line
 set showmode
 set showcmd

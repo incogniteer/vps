@@ -30,7 +30,8 @@ killbash() {
     local pids=( $(pgrep bash | grep -v $$) )
     for pid in "${pids[@]}"; do
         kill $pid
-    done
+    done 2>/dev/null
+    printf '\x1bc'
 } 2>/dev/null
 
 mkcd() {
