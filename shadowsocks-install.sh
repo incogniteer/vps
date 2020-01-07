@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-#Unofficial bash strick mode!
-#Alternatively: set -euo pipefail 
+#Unofficial bash strict mode!
 #IFS=$'\n\t', $' \t\n' is too eager
-set -o nounset #set -u
+set -o nounset
 set -o pipefail
-set -o errexit #set -e
+set -o errexit
 set +o histexpand
-#set -o xtrace #set -x
+
+#set -o xtrace
 DEBUG=true
 [[ "${DEBUG:-false}" == true ]] && set -o xtrace
 

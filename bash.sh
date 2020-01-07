@@ -29,6 +29,7 @@ ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 #Add [ ] otherwise will report errors
 cat > /etc/profile.d/alias.sh <<'EOF'
 #Common aliases
+# alias cls='printf \\x1bc'
 alias ls='ls --color=auto'
 alias l.='ls -d .*'
 alias l='ls -CF'
@@ -43,7 +44,6 @@ alias li='ls -i'
 alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
-alias cls='printf \\x1bc'
 alias vi=vim
 alias py='py ' #Note the trailing space
 alias sudo='sudo ' #Enable alias in sudo
@@ -123,6 +123,12 @@ mkcd() {
     cd -P $1
     #work in command linecd -P $1
 }
+
+cls() {
+    printf '\x1bc'
+    cd ~
+}
+
 EOF
 
 
